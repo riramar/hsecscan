@@ -32,9 +32,9 @@ Code: 302
 Headers:
  Cache-Control: private
  Content-Type: text/html; charset=UTF-8
- Location: https://www.google.com.br/?gfe_rd=cr&ei=lkEtVr6sLqaX8QfVgIGYCA
+ Location: https://www.google.com.br/?gfe_rd=cr&ei=bkMtVrPgCo6q8weRoazICA
  Content-Length: 263
- Date: Sun, 25 Oct 2015 20:54:46 GMT
+ Date: Sun, 25 Oct 2015 21:02:38 GMT
  Server: GFE/2.0
  Alternate-Protocol: 443:quic,p=1
  Alt-Svc: quic=":443"; p="1"; ma=604800
@@ -44,6 +44,7 @@ Headers:
 Header Field Name: Content-Length
 Reference: https://tools.ietf.org/html/rfc7230#section-3.3.2
 Security Description: 
+Security Reference: 
 Recommendations: 
 CWE: 
 CWE URL: 
@@ -51,6 +52,7 @@ CWE URL:
 Header Field Name: Server
 Reference: https://tools.ietf.org/html/rfc7231#section-7.4.2
 Security Description: Overly long and detailed Server field values increase response latency and potentially reveal internal implementation details that might make it (slightly) easier for attackers to find and exploit known security holes.
+Security Reference: https://tools.ietf.org/html/rfc7231#section-7.4.2
 Recommendations: An origin server SHOULD NOT generate a Server field containing needlessly fine-grained detail and SHOULD limit the addition of subproducts by third parties.
 CWE: CWE-200: Information Exposure
 CWE URL: https://cwe.mitre.org/data/definitions/200.html
@@ -58,6 +60,7 @@ CWE URL: https://cwe.mitre.org/data/definitions/200.html
 Header Field Name: Connection
 Reference: https://tools.ietf.org/html/rfc7230#section-6.1
 Security Description: 
+Security Reference: 
 Recommendations: 
 CWE: 
 CWE URL: 
@@ -65,6 +68,7 @@ CWE URL:
 Header Field Name: Location
 Reference: https://tools.ietf.org/html/rfc7231#section-7.1.2
 Security Description:  Although fragment identifiers used within URI references are not sent in requests, implementers ought to be aware that they will be visible to the user agent and any extensions or scripts running as a result of the response. In particular, when a redirect occurs and the original request's fragment identifier is inherited by the new reference in Location, this might have the effect of disclosing one site's fragment to another site.
+Security Reference: https://tools.ietf.org/html/rfc7231#section-9.5
 Recommendations: If the first site uses personal information in fragments, it ought to ensure that redirects to other sites include a (possibly empty) fragment component in order to block that inheritance.
 CWE: CWE-200: Information Exposure
 CWE URL: https://cwe.mitre.org/data/definitions/200.html
@@ -72,6 +76,7 @@ CWE URL: https://cwe.mitre.org/data/definitions/200.html
 Header Field Name: Cache-Control
 Reference: https://tools.ietf.org/html/rfc7234#section-5.2
 Security Description: Caches expose additional potential vulnerabilities, since the contents of the cache represent an attractive target for malicious exploitation.  Because cache contents persist after an HTTP request is complete, an attack on the cache can reveal information long after a user believes that the information has been removed from the network.  Therefore, cache contents need to be protected as sensitive information.
+Security Reference: https://tools.ietf.org/html/rfc7234#section-8
 Recommendations: Do not store unnecessarily sensitive information in the cache.
 CWE: CWE-524: Information Exposure Through Caching
 CWE URL: https://cwe.mitre.org/data/definitions/524.html
@@ -79,6 +84,7 @@ CWE URL: https://cwe.mitre.org/data/definitions/524.html
 Header Field Name: Date
 Reference: https://tools.ietf.org/html/rfc7231#section-7.1.1.2
 Security Description: 
+Security Reference: 
 Recommendations: 
 CWE: 
 CWE URL: 
@@ -86,15 +92,16 @@ CWE URL:
 Header Field Name: Content-Type
 Reference: https://tools.ietf.org/html/rfc7231#section-3.1.1.5
 Security Description: In practice, resource owners do not always properly configure their origin server to provide the correct Content-Type for a given representation, with the result that some clients will examine a payload's content and override the specified type. Clients that do so risk drawing incorrect conclusions, which might expose additional security risks (e.g., "privilege escalation").
+Security Reference: https://tools.ietf.org/html/rfc7231#section-3.1.1.5
 Recommendations: Properly configure their origin server to provide the correct Content-Type for a given representation.
 CWE: CWE-430: Deployment of Wrong Handler
 CWE URL: https://cwe.mitre.org/data/definitions/430.html
 
 >> RESPONSE <<
-URL: https://www.google.com.br/?gfe_rd=cr&ei=lkEtVr6sLqaX8QfVgIGYCA
+URL: https://www.google.com.br/?gfe_rd=cr&ei=bkMtVrPgCo6q8weRoazICA
 Code: 200
 Headers:
- Date: Sun, 25 Oct 2015 20:54:46 GMT
+ Date: Sun, 25 Oct 2015 21:02:38 GMT
  Expires: -1
  Cache-Control: private, max-age=0
  Content-Type: text/html; charset=ISO-8859-1
@@ -102,8 +109,8 @@ Headers:
  Server: gws
  X-XSS-Protection: 1; mode=block
  X-Frame-Options: SAMEORIGIN
- Set-Cookie: PREF=ID=1111111111111111:FF=0:TM=1445806486:LM=1445806486:V=1:S=FBHaVyCMoT8ewoeP; expires=Thu, 31-Dec-2015 16:02:17 GMT; path=/; domain=.google.com.br
- Set-Cookie: NID=72=yeirrIfpYZuI2zaLBC5JshG_8HElY_RxKtwX2z3TjOsvN56F57mX4aTsje7HuVkfI2cF9ZOj5YYhLqFQMR83BtQsA1O8KoEA9xmgL7CVhn9NG8WyDwF79Y9ZMkwxS89uxP7oIGFK__8p4RXJH5qNd6U4tyLonXRx; expires=Mon, 25-Apr-2016 20:54:46 GMT; path=/; domain=.google.com.br; HttpOnly
+ Set-Cookie: PREF=ID=1111111111111111:FF=0:TM=1445806958:LM=1445806958:V=1:S=7gAQcsSnOBHxpVk6; expires=Thu, 31-Dec-2015 16:02:17 GMT; path=/; domain=.google.com.br
+ Set-Cookie: NID=72=Fv1PpZvj7xcoqfkdK-Cf8sco_rgqZC5OMVoisYju7x8jQlHtLGeHE9iTVrUfQ-BnL-s__2RJ5XY-cjuwQkbApUgLSaqni_jHjbUzShdxQfBHANIybhOVHNH7q0iLPYwfmtZclbsSyKNhVJ1jpLU_a4bCYhaFw6I; expires=Mon, 25-Apr-2016 21:02:38 GMT; path=/; domain=.google.com.br; HttpOnly
  Alternate-Protocol: 443:quic,p=1
  Alt-Svc: quic="www.google.com:443"; p="1"; ma=600,quic=":443"; p="1"; ma=600
  Accept-Ranges: none
@@ -114,6 +121,7 @@ Headers:
 Header Field Name: X-XSS-Protection
 Reference: http://blogs.msdn.com/b/ie/archive/2008/07/02/ie8-security-part-iv-the-xss-filter.aspx
 Security Description: This header enables the Cross-site scripting (XSS) filter built into most recent web browsers. It's usually enabled by default anyway, so the role of this header is to re-enable the filter for this particular website if it was disabled by the user. This header is supported in IE 8+, and in Chrome (not sure which versions). The anti-XSS filter was added in Chrome 4. Its unknown if that version honored this header.
+Security Reference: https://www.owasp.org/index.php/List_of_useful_HTTP_headers
 Recommendations: Use "X-XSS-Protection: 1; mode=block" whenever is possible (ref. http://blogs.msdn.com/b/ieinternals/archive/2011/01/31/controlling-the-internet-explorer-xss-filter-with-the-x-xss-protection-http-header.aspx).
 CWE: CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')
 CWE URL: https://cwe.mitre.org/data/definitions/79.html
@@ -121,6 +129,7 @@ CWE URL: https://cwe.mitre.org/data/definitions/79.html
 Header Field Name: Set-Cookie
 Reference: https://tools.ietf.org/html/rfc6265
 Security Description: Cookies have a number of security pitfalls. In particular, cookies encourage developers to rely on ambient authority for authentication, often becoming vulnerable to attacks such as cross-site request forgery. Also, when storing session identifiers in cookies, developers often create session fixation vulnerabilities. Transport-layer encryption, such as that employed in HTTPS, is insufficient to prevent a network attacker from obtaining or altering a victim's cookies because the cookie protocol itself has various vulnerabilities. In addition, by default, cookies do not provide confidentiality or integrity from network attackers, even when used in conjunction with HTTPS.
+Security Reference: https://tools.ietf.org/html/rfc6265#section-8
 Recommendations: Please at least read these references: https://tools.ietf.org/html/rfc6265#section-8 and https://www.owasp.org/index.php/Session_Management_Cheat_Sheet#Cookies.
 CWE: CWE-614: Sensitive Cookie in HTTPS Session Without 'Secure' Attribute
 CWE URL: https://cwe.mitre.org/data/definitions/614.html
@@ -128,6 +137,7 @@ CWE URL: https://cwe.mitre.org/data/definitions/614.html
 Header Field Name: Accept-Ranges
 Reference: https://tools.ietf.org/html/rfc7233#section-2.3
 Security Description: Unconstrained multiple range requests are susceptible to denial-of-service attacks because the effort required to request many overlapping ranges of the same data is tiny compared to the time, memory, and bandwidth consumed by attempting to serve the requested data in many parts.
+Security Reference: https://tools.ietf.org/html/rfc7233#section-6
 Recommendations: Servers ought to ignore, coalesce, or reject egregious range requests, such as requests for more than two overlapping ranges or for many small ranges in a single set, particularly when the ranges are requested out of order for no apparent reason.
 CWE: CWE-400: Uncontrolled Resource Consumption ('Resource Exhaustion')
 CWE URL: https://cwe.mitre.org/data/definitions/400.html
@@ -135,6 +145,7 @@ CWE URL: https://cwe.mitre.org/data/definitions/400.html
 Header Field Name: Expires
 Reference: https://tools.ietf.org/html/rfc7234#section-5.3
 Security Description: 
+Security Reference: 
 Recommendations: 
 CWE: 
 CWE URL: 
@@ -142,6 +153,7 @@ CWE URL:
 Header Field Name: Vary
 Reference: https://tools.ietf.org/html/rfc7231#section-7.1.4
 Security Description: 
+Security Reference: 
 Recommendations: 
 CWE: 
 CWE URL: 
@@ -149,6 +161,7 @@ CWE URL:
 Header Field Name: Server
 Reference: https://tools.ietf.org/html/rfc7231#section-7.4.2
 Security Description: Overly long and detailed Server field values increase response latency and potentially reveal internal implementation details that might make it (slightly) easier for attackers to find and exploit known security holes.
+Security Reference: https://tools.ietf.org/html/rfc7231#section-7.4.2
 Recommendations: An origin server SHOULD NOT generate a Server field containing needlessly fine-grained detail and SHOULD limit the addition of subproducts by third parties.
 CWE: CWE-200: Information Exposure
 CWE URL: https://cwe.mitre.org/data/definitions/200.html
@@ -156,6 +169,7 @@ CWE URL: https://cwe.mitre.org/data/definitions/200.html
 Header Field Name: Connection
 Reference: https://tools.ietf.org/html/rfc7230#section-6.1
 Security Description: 
+Security Reference: 
 Recommendations: 
 CWE: 
 CWE URL: 
@@ -163,6 +177,7 @@ CWE URL:
 Header Field Name: Cache-Control
 Reference: https://tools.ietf.org/html/rfc7234#section-5.2
 Security Description: Caches expose additional potential vulnerabilities, since the contents of the cache represent an attractive target for malicious exploitation.  Because cache contents persist after an HTTP request is complete, an attack on the cache can reveal information long after a user believes that the information has been removed from the network.  Therefore, cache contents need to be protected as sensitive information.
+Security Reference: https://tools.ietf.org/html/rfc7234#section-8
 Recommendations: Do not store unnecessarily sensitive information in the cache.
 CWE: CWE-524: Information Exposure Through Caching
 CWE URL: https://cwe.mitre.org/data/definitions/524.html
@@ -170,6 +185,7 @@ CWE URL: https://cwe.mitre.org/data/definitions/524.html
 Header Field Name: Date
 Reference: https://tools.ietf.org/html/rfc7231#section-7.1.1.2
 Security Description: 
+Security Reference: 
 Recommendations: 
 CWE: 
 CWE URL: 
@@ -177,6 +193,7 @@ CWE URL:
 Header Field Name: P3P
 Reference: http://www.w3.org/TR/P3P11/#syntax_ext
 Security Description: While P3P itself does not include security mechanisms, it is intended to be used in conjunction with security tools. Users' personal information should always be protected with reasonable security safeguards in keeping with the sensitivity of the information.
+Security Reference: http://www.w3.org/TR/P3P11/#principles_security
 Recommendations: -
 CWE: -
 CWE URL: -
@@ -184,6 +201,7 @@ CWE URL: -
 Header Field Name: Content-Type
 Reference: https://tools.ietf.org/html/rfc7231#section-3.1.1.5
 Security Description: In practice, resource owners do not always properly configure their origin server to provide the correct Content-Type for a given representation, with the result that some clients will examine a payload's content and override the specified type. Clients that do so risk drawing incorrect conclusions, which might expose additional security risks (e.g., "privilege escalation").
+Security Reference: https://tools.ietf.org/html/rfc7231#section-3.1.1.5
 Recommendations: Properly configure their origin server to provide the correct Content-Type for a given representation.
 CWE: CWE-430: Deployment of Wrong Handler
 CWE URL: https://cwe.mitre.org/data/definitions/430.html
@@ -191,6 +209,7 @@ CWE URL: https://cwe.mitre.org/data/definitions/430.html
 Header Field Name: X-Frame-Options
 Reference: https://tools.ietf.org/html/rfc7034
 Security Description: The use of "X-Frame-Options" allows a web page from host B to declare that its content (for example, a button, links, text, etc.) must not be displayed in a frame (<frame> or <iframe>) of another page (e.g., from host A). This is done by a policy declared in the HTTP header and enforced by browser implementations.
+Security Reference: https://tools.ietf.org/html/rfc7034
 Recommendations:  In 2009 and 2010, many browser vendors ([Microsoft-X-Frame-Options] and [Mozilla-X-Frame-Options]) introduced the use of a non-standard HTTP [RFC2616] header field "X-Frame-Options" to protect against clickjacking. Please check here https://www.owasp.org/index.php/Clickjacking_Defense_Cheat_Sheet what's the best option for your case.
 CWE: CWE-693: Protection Mechanism Failure
 CWE URL: https://cwe.mitre.org/data/definitions/693.html

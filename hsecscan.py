@@ -43,7 +43,7 @@ def check_header(header):
     cur = conn.cursor()
     t = (header[0],)
     #cur.execute('SELECT * FROM headers WHERE "Header Field Name" = ? COLLATE NOCASE', t)
-    cur.execute('SELECT "Header Field Name", "Reference", "Security Description", "Recommendations", "CWE", "CWE URL" FROM headers WHERE "Header Field Name" = ? COLLATE NOCASE', t)
+    cur.execute('SELECT "Header Field Name", "Reference", "Security Description", "Security Reference", "Recommendations", "CWE", "CWE URL" FROM headers WHERE "Header Field Name" = ? COLLATE NOCASE', t)
     col_names = [cn[0] for cn in cur.description]
     for row in cur:
         col_index = 0
