@@ -8,9 +8,9 @@ import urllib2
 class SmartRedirectHandler(urllib2.HTTPRedirectHandler):
     def redirect_request(self, req, fp, code, msg, headers, newurl):
         newreq = urllib2.HTTPRedirectHandler.redirect_request(self, req, fp, code, msg, headers, newurl)
-        print 'URL:', req.get_full_url()
-        print 'Code:', code
-        print 'Headers:', '\n', headers
+        print '>> REDIRECT INFO <<'
+        print_response(req.get_full_url(), code, headers)
+        print '>> REDIRECT HEADERS DETAILS <<'
         for header in headers.items():
             check_header(header)
         return newreq
@@ -30,18 +30,27 @@ def print_database(headers):
     cur.close()
     conn.close()
 
+def print_response(url, code, headers):
+    print 'URL:', url
+    print 'Code:', code
+    print 'Headers:'
+    for line in str(headers).splitlines():
+        print '', line
+    print ''
+
 def check_header(header):
     conn = sqlite3.connect('hsecscan.db')
     cur = conn.cursor()
     t = (header[0],)
-    cur.execute('SELECT * FROM headers WHERE "Header Field Name" = ? COLLATE NOCASE', t)
+    #cur.execute('SELECT * FROM headers WHERE "Header Field Name" = ? COLLATE NOCASE', t)
+    cur.execute('SELECT "Header Field Name", "Reference", "Security Description", "Recommendations", "CWE", "CWE URL" FROM headers WHERE "Header Field Name" = ? COLLATE NOCASE', t)
     col_names = [cn[0] for cn in cur.description]
     for row in cur:
         col_index = 0
         for cel in row:
-            print '  ' + col_names[col_index] + ':', cel
+            print col_names[col_index] + ':', cel
             col_index += 1
-        print '\n'
+        print ''
     cur.close()
     conn.close()
 
@@ -54,9 +63,9 @@ def scan(url, redirect):
         response = opener.open(request)
     else:
         response = urllib2.urlopen(request)
-    print 'URL:', response.geturl()
-    print 'Code:', response.getcode()
-    print 'Headers:', '\n', response.info(), '\n'
+    print '>> RESPONSE <<'
+    print_response(response.geturl(), response.getcode(), response.info())
+    print '>> RESPONSE HEADERS DETAILS <<'
     for header in response.info().items():
         check_header(header)
 
