@@ -25,17 +25,19 @@ optional arguments:
 # Example
 
 ```
-$ ./hsecscan.py -u http://google.com -R
+$ ./hsecscan.py -u https://google.com -R
 >> REDIRECT INFO <<
-URL: http://google.com
+URL: https://google.com
 Code: 302
 Headers:
  Cache-Control: private
  Content-Type: text/html; charset=UTF-8
- Location: http://www.google.com.br/?gfe_rd=cr&ei=LDctVvn4AaaX8QfVgIGYCA
- Content-Length: 262
- Date: Sun, 25 Oct 2015 20:10:20 GMT
+ Location: https://www.google.com.br/?gfe_rd=cr&ei=1jctVrXBHayX8QfOgIG4Bg
+ Content-Length: 263
+ Date: Sun, 25 Oct 2015 20:13:10 GMT
  Server: GFE/2.0
+ Alternate-Protocol: 443:quic,p=1
+ Alt-Svc: quic=":443"; p="1"; ma=604800
  Connection: close
 
 >> REDIRECT HEADERS DETAILS <<
@@ -47,10 +49,10 @@ CWE: CWE-200: Information Exposure
 CWE URL: https://cwe.mitre.org/data/definitions/200.html
 
 >> RESPONSE <<
-URL: http://www.google.com.br/?gfe_rd=cr&ei=LDctVvn4AaaX8QfVgIGYCA
+URL: https://www.google.com.br/?gfe_rd=cr&ei=1jctVrXBHayX8QfOgIG4Bg
 Code: 200
 Headers:
- Date: Sun, 25 Oct 2015 20:10:20 GMT
+ Date: Sun, 25 Oct 2015 20:13:10 GMT
  Expires: -1
  Cache-Control: private, max-age=0
  Content-Type: text/html; charset=ISO-8859-1
@@ -58,8 +60,10 @@ Headers:
  Server: gws
  X-XSS-Protection: 1; mode=block
  X-Frame-Options: SAMEORIGIN
- Set-Cookie: PREF=ID=1111111111111111:FF=0:TM=1445803820:LM=1445803820:V=1:S=w1rViXtFxqZRK5gh; expires=Thu, 31-Dec-2015 16:02:17 GMT; path=/; domain=.google.com.br
- Set-Cookie: NID=72=Qfq0lwYhEp-U8eNLxFP26IW-ma8OlHF0Z_jIznWPAgbndJw_Wh2-53WDHFvXEfxRZj7kYXSRflr-cm_n9UWf3Y9543uH56pjTlH8BWCGp5rxkETclZiP9Yx85liSFtiOJZFn0JGYlNkz7FUZfWt2vwiDmqo0TjE; expires=Mon, 25-Apr-2016 20:10:20 GMT; path=/; domain=.google.com.br; HttpOnly
+ Set-Cookie: PREF=ID=1111111111111111:FF=0:TM=1445803990:LM=1445803990:V=1:S=kbyFnB4KWC2dR5OS; expires=Thu, 31-Dec-2015 16:02:17 GMT; path=/; domain=.google.com.br
+ Set-Cookie: NID=72=xDr1pB6u-vL0zdU-WlSvUBAnXfd1bpUs6wKBsYoTiO4nqlY694ZWpjQYQeZAqS6zbNGYD9asgwXWEclw6XJppBvUtrUpnqteFs5CDY0VJMgo-_qfqM_8CsSEm3dSL0JAO4Lo6Vl5RA0JYZbiV4mr_oQIGnN_Epc; expires=Mon, 25-Apr-2016 20:13:10 GMT; path=/; domain=.google.com.br; HttpOnly
+ Alternate-Protocol: 443:quic,p=1
+ Alt-Svc: quic="www.google.com:443"; p="1"; ma=600,quic=":443"; p="1"; ma=600
  Accept-Ranges: none
  Vary: Accept-Encoding
  Connection: close
