@@ -1,12 +1,12 @@
-## hsecscan
+# hsecscan
 
 A security scanner for HTTP response headers.</p>
 
-## Requirements
+# Requirements
 
 Python 2.x
 
-## Usage
+# Usage
 
 ```
 $ ./hsecscan.py 
@@ -22,7 +22,7 @@ optional arguments:
   -R, --redirect     Print redirect headers.
 ```
 
-## Example
+# Example
 
 ```
 $ ./hsecscan.py -u http://google.com
