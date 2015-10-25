@@ -1,4 +1,90 @@
 Header Field Name	Type 1	 Protocol	 Status	 Reference	Type 2	Enable	Required	HTTPS	Security Description	Security Reference	Recommendations	CWE	CWE URL
+A-IM	Permanent	http		https://tools.ietf.org/html/rfc3229#section-10.5.3	Request	N							
+Accept	Permanent	http	standard	https://tools.ietf.org/html/rfc7231#section-5.3.2	Request	N							
+Accept-Additions	Permanent	http		https://tools.ietf.org/html/rfc2324#section-2.2.2.1	Request	N							
+Accept-Charset	Permanent	http	standard	https://tools.ietf.org/html/rfc7231#section-5.3.3	Request	N							
+Accept-Datetime	Permanent	http	informational	https://tools.ietf.org/html/rfc7089#section-2.1.1	Request	N							
+Accept-Encoding	Permanent	http	standard	https://tools.ietf.org/html/rfc7231#section-5.3.4	Request	N							
+Accept-Features	Permanent	http		https://tools.ietf.org/html/rfc2295#section-8.2	Request	N							
+Accept-Language	Permanent	http	standard	https://tools.ietf.org/html/rfc7231#section-5.3.5	Request	N							
+Accept-Patch	Permanent	http		https://tools.ietf.org/html/rfc5789#section-3.1	Response	Y	N	N	Sometimes an HTTP intermediary might try to detect viruses being sent via HTTP by checking the body of the PUT/POST request or GET response.  The PATCH method complicates such watch-keeping because neither the source document nor the patch document might be a virus, yet the result could be.	https://tools.ietf.org/html/rfc5789#section-5	Antivirus software scans for viruses or worms.	CWE-509: Replicating Malicious Code (Virus or Worm)	https://cwe.mitre.org/data/definitions/509.html
+Accept-Ranges	Permanent	http	standard	https://tools.ietf.org/html/rfc7233#section-2.3	Response	Y	N	N	Unconstrained multiple range requests are susceptible to denial-of-service attacks because the effort required to request many overlapping ranges of the same data is tiny compared to the time, memory, and bandwidth consumed by attempting to serve the requested data in many parts.	https://tools.ietf.org/html/rfc7233#section-6	Servers ought to ignore, coalesce, or reject egregious range requests, such as requests for more than two overlapping ranges or for many small ranges in a single set, particularly when the ranges are requested out of order for no apparent reason.	CWE-400: Uncontrolled Resource Consumption ('Resource Exhaustion')	https://cwe.mitre.org/data/definitions/400.html
+Age	Permanent	http	standard	https://tools.ietf.org/html/rfc7234#section-5.1	Response	N							
+Allow	Permanent	http	standard	https://tools.ietf.org/html/rfc7231#section-7.4.1	Response	Y	N	N	Some methods can potentially pose a security risk for a web application, as they allow an attacker to modify the files stored on the web server and, in some scenarios, steal the credentials of legitimate users. 	https://www.owasp.org/index.php/Test_HTTP_Methods_(OTG-CONFIG-006)	Methods that are not been used should be disabled.	CWE-200: Information Exposure	https://cwe.mitre.org/data/definitions/200.html
+ALPN	Permanent	http	standard	https://tools.ietf.org/html/rfc7639#section-2	Request	N							
+Alternates	Permanent	http		https://tools.ietf.org/html/rfc2295#section-8.3	Response	N							
+Apply-To-Redirect-Ref	Permanent	http		https://tools.ietf.org/html/rfc4437#section-12.2	Request	N							
+Authentication-Info	Permanent	http	standard	https://datatracker.ietf.org/doc/draft-ietf-httpbis-auth-info/	Response	Y	N	N	Adding information to HTTP responses that are sent over an unencrypted channel can affect security and privacy.	https://datatracker.ietf.org/doc/draft-ietf-httpbis-auth-info/	Encrypt the data with a reliable encryption scheme before transmitting.	CWE-319: Cleartext Transmission of Sensitive Information	https://cwe.mitre.org/data/definitions/319.html
+Authorization	Permanent	http	standard	https://tools.ietf.org/html/rfc7235#section-4.2	Request	N							
+C-Ext	Permanent	http		https://tools.ietf.org/html/rfc2774#section-4.3	Response	N							
+C-Man	Permanent	http		https://tools.ietf.org/html/rfc2774#section-4.2	Request	N							
+C-Opt	Permanent	http		https://tools.ietf.org/html/rfc2774#section-4.2	Request	N							
+C-PEP	Permanent	http		http://www.w3.org/TR/WD-http-pep-971121.html#_Toc404743948	Request	N							
+C-PEP-Info	Permanent	http		http://www.w3.org/TR/WD-http-pep-971121.html#_Toc404743954	Response	N							
+Cache-Control	Permanent	http	standard	https://tools.ietf.org/html/rfc7234#section-5.2	Request/Response	Y	N	N	Caches expose additional potential vulnerabilities, since the contents of the cache represent an attractive target for malicious exploitation.  Because cache contents persist after an HTTP request is complete, an attack on the cache can reveal information long after a user believes that the information has been removed from the network.  Therefore, cache contents need to be protected as sensitive information.	https://tools.ietf.org/html/rfc7234#section-8	Do not store unnecessarily sensitive information in the cache.	CWE-524: Information Exposure Through Caching	https://cwe.mitre.org/data/definitions/524.html
+Close	Permanent	http	reserved	https://tools.ietf.org/html/rfc7230#section-8.1	Reserved	N							
+Connection	Permanent	http	standard	https://tools.ietf.org/html/rfc7230#section-6.1	Request/Response	N							
+Content-Base	Permanent	http	obsoleted	https://tools.ietf.org/html/rfc2068 https://tools.ietf.org/html/rfc2616	Response	N							
+Content-Disposition	Permanent	http	standard	https://tools.ietf.org/html/rfc6266	Response	Y	N	N	Using server-supplied information for constructing local filenames introduces many risks.  These are summarized in https://tools.ietf.org/html/rfc6266#section-4.3.	https://tools.ietf.org/html/rfc6266#section-7	https://tools.ietf.org/html/rfc6266#section-4.3	-	-
+Content-Encoding	Permanent	http	standard	https://tools.ietf.org/html/rfc7231#section-3.1.2.2	Request/Response	Y	N	N	BREACH is an instance of the CRIME attack against HTTP compression - the use by many web browser and web servers of gzip or DEFLATE data compression algorithms via the content-encoding option within HTTP.	https://en.wikipedia.org/wiki/BREACH_(security_exploit)	Another suggested approach is to disable HTTP compression whenever the referrer header indicates a cross-site request, or when the header is not present. This approach allows effective mitigation of the attack without losing functionality, only incurring a performance penalty on affected requests.	CWE-310: Cryptographic Issues	https://cwe.mitre.org/data/definitions/310.html
+Content-ID	Permanent	http		http://www.w3.org/Architecture/9709_Workshop/paper01/html/sld013.htm	Response	N							
+Content-Language	Permanent	http	standard	https://tools.ietf.org/html/rfc7231#section-3.1.3.2	Response	N							
+Content-Length	Permanent	http	standard	https://tools.ietf.org/html/rfc7230#section-3.3.2	Request/Response	N							
+Content-Location	Permanent	http	standard	https://tools.ietf.org/html/rfc7231#section-3.1.4.2	Request/Response	N							
+Content-MD5	Permanent	http		https://tools.ietf.org/html/rfc2616#section-14.15	Request/Response	Y	N	N	The Content-MD5 header is good for detecting accidental modification of the entity-body in transit, but is not proof against malicious attacks.	https://tools.ietf.org/html/rfc2616#section-14.15	Use only for detecting accidental modification.	CWE-354: Improper Validation of Integrity Check Value	https://cwe.mitre.org/data/definitions/354.html
+Content-Range	Permanent	http	standard	https://tools.ietf.org/html/rfc7233#section-4.2	Response	Y	N	N	Unconstrained multiple range requests are susceptible to denial-of-service attacks because the effort required to request many overlapping ranges of the same data is tiny compared to the time, memory, and bandwidth consumed by attempting to serve the requested data in many parts.	https://tools.ietf.org/html/rfc7233#section-6	Servers ought to ignore, coalesce, or reject egregious range requests, such as requests for more than two overlapping ranges or for many small ranges in a single set, particularly when the ranges are requested out of order for no apparent reason.	CWE-400: Uncontrolled Resource Consumption ('Resource Exhaustion')	https://cwe.mitre.org/data/definitions/400.html
+Content-Script-Type	Permanent	http		http://www.w3.org/TR/html401/interact/scripts.html#h-18.2.2.1	Response	N							
+Content-Style-Type	Permanent	http		http://www.w3.org/TR/html401/present/styles.html#h-14.2.1	Response	N							
+Content-Type	Permanent	http	standard	https://tools.ietf.org/html/rfc7231#section-3.1.1.5	Response	Y	Y	N	In practice, resource owners do not always properly configure their origin server to provide the correct Content-Type for a given representation, with the result that some clients will examine a payload's content and override the specified type. Clients that do so risk drawing incorrect conclusions, which might expose additional security risks (e.g., "privilege escalation").	https://tools.ietf.org/html/rfc7231#section-3.1.1.5	Properly configure their origin server to provide the correct Content-Type for a given representation.	CWE-430: Deployment of Wrong Handler	https://cwe.mitre.org/data/definitions/430.html
+Content-Version	Permanent	http		https://tools.ietf.org/html/rfc2068#section-19.6.2.2	Request	N							
+Cookie	Permanent	http	standard	https://tools.ietf.org/html/rfc6265#section-5.4	Request	N							
+Cookie2	Permanent	http	obsoleted	https://tools.ietf.org/html/rfc2965	Request	N							
+DASL	Permanent	http	standard	https://tools.ietf.org/html/rfc5323#section-3.2	Response	Y	N	N	A server should prepare for denial-of-service attacks.	https://tools.ietf.org/html/rfc5323#section-7	A server should prepare for denial-of-service attacks.	CWE-400: Uncontrolled Resource Consumption ('Resource Exhaustion')	https://cwe.mitre.org/data/definitions/400.html
+DAV	Permanent	http	standard	https://tools.ietf.org/html/rfc4918#section-10.1	Request/Response	Y	N	N	Denial-of-service attacks are of special concern to WebDAV servers. WebDAV plus HTTP enables denial-of-service attacks on every part of a system's resources.	https://tools.ietf.org/html/rfc4918#section-20	WebDAV servers need to be aware of the possibility of a denial-of-service attack at all levels.	CWE-400: Uncontrolled Resource Consumption ('Resource Exhaustion')	https://cwe.mitre.org/data/definitions/400.html
+Date	Permanent	http	standard	https://tools.ietf.org/html/rfc7231#section-7.1.1.2	Request/Response	N							
+Default-Style	Permanent	http		http://www.w3.org/TR/html401/present/styles.html#h-14.3.2	Response	N							
+Delta-Base	Permanent	http		https://tools.ietf.org/html/rfc3229#section-10.5.1	Response	N							
+Depth	Permanent	http	standard	https://tools.ietf.org/html/rfc4918#section-10.2	Request/Response	N							
+Derived-From	Permanent	http		https://tools.ietf.org/html/rfc2068#section-19.6.2.3	Request	N							
+Destination	Permanent	http	standard	https://tools.ietf.org/html/rfc4918#section-10.3	Request	N							
+Differential-ID	Permanent	http		http://www.w3.org/TR/NOTE-drp	Request	N							
+Digest	Permanent	http		https://tools.ietf.org/html/rfc3230#section-4.3.2	Request/Response	Y	N	N	This document specifies a data integrity mechanism that protects HTTP instance data, but not HTTP entity headers, from certain kinds of accidental corruption. It is also useful in detecting at least one spoofing attack.  However, it is not intended as general protection against malicious tampering with HTTP messages.	https://tools.ietf.org/html/rfc3230#section-7	The HTTP Digest Access Authentication mechanism provides some protection against malicious tampering.	CWE-354: Improper Validation of Integrity Check Value	https://cwe.mitre.org/data/definitions/354.html
+ETag	Permanent	http	standard	https://tools.ietf.org/html/rfc7232#section-2.3	Response	Y	N	N	An entity-tag can be abused in ways that create privacy risks.  For example, a site might deliberately construct a semantically invalid entity-tag that is unique to the user or user agent, send it in a cacheable response with a long freshness time, and then read that entity-tag in later conditional requests as a means of re-identifying that user or user agent.	https://tools.ietf.org/html/rfc7232#section-8	Read https://tools.ietf.org/html/rfc7232#section-8.	CWE-359: Exposure of Private Information ('Privacy Violation')	https://cwe.mitre.org/data/definitions/359.html
+Expect	Permanent	http	standard	https://tools.ietf.org/html/rfc7231#section-5.1.1	Request	N							
+Expires	Permanent	http	standard	https://tools.ietf.org/html/rfc7234#section-5.3	Response	N							
+Ext	Permanent	http		https://tools.ietf.org/html/rfc2774#section-4.3	Response	N							
+Forwarded	Permanent	http	standard	https://tools.ietf.org/html/rfc7239#section-4	Request	N							
+From	Permanent	http	standard	https://tools.ietf.org/html/rfc7231#section-5.5.1	Request	N							
+GetProfile	Permanent	http		http://www.w3.org/TR/NOTE-OPS-OverHTTP#I11	Response	N							
+Hobareg	Permanent	http	experimental	https://tools.ietf.org/html/rfc7486#section-6.1.1	Response	N							
+Host	Permanent	http	standard	https://tools.ietf.org/html/rfc7230#section-5.4	Request	N							
+HTTP2-Settings	Permanent	http	standard	https://tools.ietf.org/html/rfc7540#section-3.2.1	Request	N							
+IM	Permanent	http		https://tools.ietf.org/html/rfc3229#section-10.5.2	Response	N							
+If	Permanent	http	standard	https://tools.ietf.org/html/rfc4918#section-10.4	Request	N							
+If-Match	Permanent	http	standard	https://tools.ietf.org/html/rfc7232#section-3.1	Request	N							
+If-Modified-Since	Permanent	http	standard	https://tools.ietf.org/html/rfc7232#section-3.3	Request	N							
+If-None-Match	Permanent	http	standard	https://tools.ietf.org/html/rfc7232#section-3.2	Request	N							
+If-Range	Permanent	http	standard	https://tools.ietf.org/html/rfc7233#section-3.2	Request	N							
+If-Schedule-Tag-Match	Permanent	http	standard	https://tools.ietf.org/html/rfc6638#section-8.3	Request	N							
+If-Unmodified-Since	Permanent	http	standard	https://tools.ietf.org/html/rfc7232#section-3.4	Request	N							
+Keep-Alive	Permanent	http		https://tools.ietf.org/html/rfc2068#section-19.7.1.1	Request/Response	N							
+Label	Permanent	http		https://tools.ietf.org/html/rfc3253#section-8.3	Request	N							
+Last-Modified	Permanent	http	standard	https://tools.ietf.org/html/rfc7232#section-2.2	Response	N							
+Link	Permanent	http		https://tools.ietf.org/html/rfc5988#section-5	Response	Y	N	N	The content of the Link header field is not secure, private or integrity-guaranteed, and due caution should be exercised when using it.	https://tools.ietf.org/html/rfc5988#section-5	Use of Transport Layer Security (TLS) with HTTP ([RFC2818] and [RFC2817]) is currently the only end-to-end way to provide such protection. Applications that take advantage of typed links should consider the attack vectors opened by automatically following, trusting, or otherwise using links gathered from HTTP headers. In particular, Link headers that use the "anchor" parameter to associate a link's context with another resource should be treated with due caution. The Link entity-header field makes extensive use of IRIs and URIs. See [RFC3987] for security considerations relating to IRIs. See [RFC3986] for security considerations relating to URIs. See [RFC2616] for security considerations relating to HTTP headers.	CWE-319: Cleartext Transmission of Sensitive Information	https://cwe.mitre.org/data/definitions/319.html
+Location	Permanent	http	standard	https://tools.ietf.org/html/rfc7231#section-7.1.2	Response	Y	N	N	 Although fragment identifiers used within URI references are not sent in requests, implementers ought to be aware that they will be visible to the user agent and any extensions or scripts running as a result of the response. In particular, when a redirect occurs and the original request's fragment identifier is inherited by the new reference in Location, this might have the effect of disclosing one site's fragment to another site.	https://tools.ietf.org/html/rfc7231#section-9.5	If the first site uses personal information in fragments, it ought to ensure that redirects to other sites include a (possibly empty) fragment component in order to block that inheritance.	CWE-200: Information Exposure	https://cwe.mitre.org/data/definitions/200.html
+Lock-Token	Permanent	http	standard	https://tools.ietf.org/html/rfc4918#section-10.5	Request	N							
+Man	Permanent	http		https://tools.ietf.org/html/rfc2774#section-5	Request	N							
+Max-Forwards	Permanent	http	standard	https://tools.ietf.org/html/rfc7231#section-5.1.2	Request	N							
+Memento-Datetime	Permanent	http	informational	https://tools.ietf.org/html/rfc7089#section-2.1.1	Response	N							
+Meter	Permanent	http		https://tools.ietf.org/html/rfc2227#section-5.1	Response	N							
+MIME-Version	Permanent	http	standard	https://tools.ietf.org/html/rfc7231#appendix-A.1	Response	N							
+Negotiate	Permanent	http		https://tools.ietf.org/html/rfc2295#section-8.4	Request	N							
+Opt	Permanent	http		https://tools.ietf.org/html/rfc2774#section-4.1	Request	N							
+Ordering-Type	Permanent	http	standard	https://tools.ietf.org/html/rfc3648#section-4.1.1	Request	N							
+Origin	Permanent	http	standard	https://tools.ietf.org/html/rfc6454#section-7	Request	N							
+Overwrite	Permanent	http	standard	https://tools.ietf.org/html/rfc4918#section-9.9.3	Request	N							
+P3P	Permanent	http		http://www.w3.org/TR/P3P11/#syntax_ext	Response	Y	N	N	While P3P itself does not include security mechanisms, it is intended to be used in conjunction with security tools. Users' personal information should always be protected with reasonable security safeguards in keeping with the sensitivity of the information.	http://www.w3.org/TR/P3P11/#principles_security	-	-	-
+PEP	Permanent	http		http://www.w3.org/TR/WD-http-pep-971121.html#_Toc404743947	Request	N							
 PICS-Label	Permanent	http		http://www.w3.org/TR/REC-PICS-labels/	Response	N							
 Pep-Info	Permanent	http		http://www.w3.org/TR/WD-http-pep-971121.html#_Toc404743953	Request	N							
 Position	Permanent	http	standard	https://tools.ietf.org/html/rfc3648#section-6	Request	N							
