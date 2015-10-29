@@ -4,6 +4,7 @@ import argparse
 import sqlite3
 from urlparse import urlparse
 import urllib2
+import ssl
 
 class SmartRedirectHandler(urllib2.HTTPRedirectHandler):
     def redirect_request(self, req, fp, code, msg, headers, newurl):
@@ -57,11 +58,12 @@ def scan(url, redirect):
     request = urllib2.Request(url.geturl())
     request.add_header('User-Agent', 'hsecscan')
     request.add_header('Origin', 'http://hsecscan.com')
+    context = ssl._create_unverified_context()
     if redirect:
-        opener = urllib2.build_opener(SmartRedirectHandler())
+        opener = urllib2.build_opener(SmartRedirectHandler(), context=context)
         response = opener.open(request)
     else:
-        response = urllib2.urlopen(request)
+        response = urllib2.urlopen(request, context=context)
     print '>> RESPONSE <<'
     print_response(response.geturl(), response.getcode(), response.info())
     print '>> RESPONSE HEADERS DETAILS <<'
