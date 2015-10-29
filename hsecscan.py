@@ -48,8 +48,8 @@ def check_header(header):
     for row in cur:
         col_index = 0
         for cel in row:
-            print col_names[col_index] + ':', cel
-            col_index += 1
+          print col_names[col_index] + ':', cel
+          col_index += 1
         print ''
     cur.close()
     conn.close()
@@ -68,6 +68,7 @@ def scan(url, redirect):
     print_response(response.geturl(), response.getcode(), response.info())
     print '>> RESPONSE HEADERS DETAILS <<'
     for header in response.info().items():
+        print 'Value: ' + header[1]
         check_header(header)
 
 def check_url(url):
