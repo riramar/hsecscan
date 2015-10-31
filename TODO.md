@@ -6,4 +6,5 @@
 * Add options to show only the enabled headers
 * Add option to set any other header
 * Add option to detect bad practice (eg. Content-Type without charset=utf-8)
-# Improve database fields (eg. Security description)
+* Improve database fields (eg. Security description)
+* Add proxy support
