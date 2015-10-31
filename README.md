@@ -10,16 +10,18 @@ Python 2.x
 
 ```
 $ ./hsecscan.py 
-usage: hsecscan.py [-h] [-P] [-p] [-u URL] [-R]
+usage: hsecscan.py [-h] [-P] [-p] [-u URL] [-R] [-U User-Agent]
 
 A security scanner for HTTP response headers.
 
 optional arguments:
-  -h, --help         show this help message and exit
-  -P, --database     Print the entire response headers database.
-  -p, --headers      Print only the enabled response headers from database.
-  -u URL, --URL URL  The URL to be scanned.
-  -R, --redirect     Print redirect headers.
+  -h, --help            show this help message and exit
+  -P, --database        Print the entire response headers database.
+  -p, --headers         Print only the enabled response headers from database.
+  -u URL, --URL URL     The URL to be scanned.
+  -R, --redirect        Print redirect headers.
+  -U User-Agent, --useragent User-Agent
+                        Set the User-Agent request header (default: hsecscan).
 ```
 
 # Example
