@@ -53,9 +53,9 @@ def check_header(header):
     cur.close()
     conn.close()
 
-def scan(url, redirect):
+def scan(url, redirect, useragent):
     request = urllib2.Request(url.geturl())
-    request.add_header('User-Agent', 'hsecscan')
+    request.add_header('User-Agent', useragent)
     request.add_header('Origin', 'http://hsecscan.com')
     if redirect:
         opener = urllib2.build_opener(SmartRedirectHandler())
@@ -71,7 +71,7 @@ def scan(url, redirect):
 def check_url(url):
     url_checked = urlparse(url)
     if ((url_checked.scheme != 'http') & (url_checked.scheme != 'https')) | (url_checked.netloc == ''):
-        raise argparse.ArgumentTypeError('Invalid URL (%s). Valid example: https://www.hsecscan.com/path' % url)
+        raise argparse.ArgumentTypeError('Invalid %s URL (Example: https://www.hsecscan.com/path).' % url)
     return url_checked
 
 def main():
@@ -80,13 +80,14 @@ def main():
     parser.add_argument('-p', '--headers', action='store_true', help='Print only the enabled response headers from database.')
     parser.add_argument('-u', '--URL', type=check_url, help='The URL to be scanned.')
     parser.add_argument('-R', '--redirect', action='store_true', help='Print redirect headers.')
+    parser.add_argument('-U', '--useragent', metavar='User-Agent', default='hsecscan', help='Set the User-Agent request header (default: hsecscan).')
     args = parser.parse_args()
     if args.database == True:
         print_database(False)
     elif args.headers == True:
         print_database(True)
     elif args.URL != None:
-        scan(args.URL, args.redirect)
+        scan(args.URL, args.redirect, args.useragent)
     else:
         parser.print_help()
 
