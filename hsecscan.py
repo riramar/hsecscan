@@ -4,6 +4,7 @@ import argparse
 import sqlite3
 from urlparse import urlparse
 import urllib2
+import ssl
 
 class SmartRedirectHandler(urllib2.HTTPRedirectHandler):
     def redirect_request(self, req, fp, code, msg, headers, newurl):
@@ -38,7 +39,7 @@ def print_response(url, code, headers):
         print '', line
     print ''
 
-def check_header(header):
+def check_header(header, header_value):
     conn = sqlite3.connect('hsecscan.db')
     cur = conn.cursor()
     t = (header[0],)
@@ -47,8 +48,11 @@ def check_header(header):
     for row in cur:
         col_index = 0
         for cel in row:
-            print col_names[col_index] + ':', cel
-            col_index += 1
+          if col_names[col_index] == 'Header Field Name':
+             print col_names[col_index] + ':', cel, 'Value: ' + header_value
+          else:
+             print col_names[col_index] + ':', cel
+          col_index += 1
         print ''
     cur.close()
     conn.close()
@@ -57,16 +61,17 @@ def scan(url, redirect, useragent):
     request = urllib2.Request(url.geturl())
     request.add_header('User-Agent', useragent)
     request.add_header('Origin', 'http://hsecscan.com')
+    context = ssl._create_unverified_context()
     if redirect:
-        opener = urllib2.build_opener(SmartRedirectHandler())
+        opener = urllib2.build_opener(SmartRedirectHandler(), context=context)
         response = opener.open(request)
     else:
-        response = urllib2.urlopen(request)
+        response = urllib2.urlopen(request, context=context)
     print '>> RESPONSE <<'
     print_response(response.geturl(), response.getcode(), response.info())
     print '>> RESPONSE HEADERS DETAILS <<'
     for header in response.info().items():
-        check_header(header)
+        check_header(header, header[1])
 
 def check_url(url):
     url_checked = urlparse(url)
