@@ -12,7 +12,7 @@ class SmartRedirectHandler(urllib2.HTTPRedirectHandler):
         print_response(req.get_full_url(), code, headers)
         print '>> REDIRECT HEADERS DETAILS <<'
         for header in headers.items():
-            check_header(header)
+            check_header(header, header[1])
         return newreq
 
 def print_database(headers):
@@ -38,7 +38,7 @@ def print_response(url, code, headers):
         print '', line
     print ''
 
-def check_header(header):
+def check_header(header, header_value):
     conn = sqlite3.connect('hsecscan.db')
     cur = conn.cursor()
     t = (header[0],)
@@ -47,7 +47,10 @@ def check_header(header):
     for row in cur:
         col_index = 0
         for cel in row:
-            print col_names[col_index] + ':', cel
+            if col_names[col_index] == 'Header Field Name':
+                print col_names[col_index] + ':', cel, '\nValue: ' + header_value
+            else:
+                print col_names[col_index] + ':', cel
             col_index += 1
         print ''
     cur.close()
@@ -66,7 +69,7 @@ def scan(url, redirect, useragent):
     print_response(response.geturl(), response.getcode(), response.info())
     print '>> RESPONSE HEADERS DETAILS <<'
     for header in response.info().items():
-        check_header(header)
+        check_header(header, header[1])
 
 def check_url(url):
     url_checked = urlparse(url)
