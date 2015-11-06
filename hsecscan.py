@@ -65,7 +65,7 @@ def scan(url, redirect, useragent):
         response = opener.open(request)
     else:
         response = urllib2.urlopen(request)
-    print '>> RESPONSE <<'
+    print '>> RESPONSE INFO <<'
     print_response(response.geturl(), response.getcode(), response.info())
     print '>> RESPONSE HEADERS DETAILS <<'
     for header in response.info().items():
