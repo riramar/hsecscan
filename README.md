@@ -27,90 +27,12 @@ optional arguments:
 # Example
 
 ```
-$ ./hsecscan.py -u https://google.com -R
->> REDIRECT INFO <<
-URL: https://google.com
-Code: 302
-Headers:
- Cache-Control: private
- Content-Type: text/html; charset=UTF-8
- Location: https://www.google.com.br/?gfe_rd=cr&ei=b-A8VsfpK-OU8Qehh7DgCg
- Content-Length: 263
- Date: Fri, 06 Nov 2015 17:16:31 GMT
- Server: GFE/2.0
- Alternate-Protocol: 443:quic,p=1
- Alt-Svc: quic=":443"; p="1"; ma=604800
- Connection: close
-
->> REDIRECT HEADERS DETAILS <<
-Header Field Name: Content-Length
-Value: 263
-Reference: https://tools.ietf.org/html/rfc7230#section-3.3.2
-Security Description:
-Security Reference:
-Recommendations:
-CWE:
-CWE URL:
-
-Header Field Name: Server
-Value: GFE/2.0
-Reference: https://tools.ietf.org/html/rfc7231#section-7.4.2
-Security Description: Overly long and detailed Server field values increase response latency and potentially reveal internal implementation details that might make it (slightly) easier for attackers to find and exploit known security holes.
-Security Reference: https://tools.ietf.org/html/rfc7231#section-7.4.2
-Recommendations: An origin server SHOULD NOT generate a Server field containing needlessly fine-grained detail and SHOULD limit the addition of subproducts by third parties.
-CWE: CWE-200: Information Exposure
-CWE URL: https://cwe.mitre.org/data/definitions/200.html
-
-Header Field Name: Connection
-Value: close
-Reference: https://tools.ietf.org/html/rfc7230#section-6.1
-Security Description:
-Security Reference:
-Recommendations:
-CWE:
-CWE URL:
-
-Header Field Name: Location
-Value: https://www.google.com.br/?gfe_rd=cr&ei=b-A8VsfpK-OU8Qehh7DgCg
-Reference: https://tools.ietf.org/html/rfc7231#section-7.1.2
-Security Description:  Although fragment identifiers used within URI references are not sent in requests, implementers ought to be aware that they will be visible to the user agent and any extensions or scripts running as a result of the response. In particular, when a redirect occurs and the original request's fragment identifier is inherited by the new reference in Location, this might have the effect of disclosing one site's fragment to another site.
-Security Reference: https://tools.ietf.org/html/rfc7231#section-9.5
-Recommendations: If the first site uses personal information in fragments, it ought to ensure that redirects to other sites include a (possibly empty) fragment component in order to block that inheritance.
-CWE: CWE-200: Information Exposure
-CWE URL: https://cwe.mitre.org/data/definitions/200.html
-
-Header Field Name: Cache-Control
-Value: private
-Reference: https://tools.ietf.org/html/rfc7234#section-5.2
-Security Description: Caches expose additional potential vulnerabilities, since the contents of the cache represent an attractive target for malicious exploitation.  Because cache contents persist after an HTTP request is complete, an attack on the cache can reveal information long after a user believes that the information has been removed from the network.  Therefore, cache contents need to be protected as sensitive information.
-Security Reference: https://tools.ietf.org/html/rfc7234#section-8
-Recommendations: Do not store unnecessarily sensitive information in the cache.
-CWE: CWE-524: Information Exposure Through Caching
-CWE URL: https://cwe.mitre.org/data/definitions/524.html
-
-Header Field Name: Date
-Value: Fri, 06 Nov 2015 17:16:31 GMT
-Reference: https://tools.ietf.org/html/rfc7231#section-7.1.1.2
-Security Description:
-Security Reference:
-Recommendations:
-CWE:
-CWE URL:
-
-Header Field Name: Content-Type
-Value: text/html; charset=UTF-8
-Reference: https://tools.ietf.org/html/rfc7231#section-3.1.1.5
-Security Description: In practice, resource owners do not always properly configure their origin server to provide the correct Content-Type for a given representation, with the result that some clients will examine a payload's content and override the specified type. Clients that do so risk drawing incorrect conclusions, which might expose additional security risks (e.g., "privilege escalation").
-Security Reference: https://tools.ietf.org/html/rfc7231#section-3.1.1.5
-Recommendations: Properly configure their origin server to provide the correct Content-Type for a given representation.
-CWE: CWE-430: Deployment of Wrong Handler
-CWE URL: https://cwe.mitre.org/data/definitions/430.html
-
+$ ./hsecscan.py -u https://google.com
 >> RESPONSE INFO <<
-URL: https://www.google.com.br/?gfe_rd=cr&ei=b-A8VsfpK-OU8Qehh7DgCg
+URL: https://www.google.com.br/?gfe_rd=cr&ei=Qlg_Vu-WHqWX8QeHraH4DQ
 Code: 200
 Headers:
- Date: Fri, 06 Nov 2015 17:16:31 GMT
+ Date: Sun, 08 Nov 2015 14:12:18 GMT
  Expires: -1
  Cache-Control: private, max-age=0
  Content-Type: text/html; charset=ISO-8859-1
@@ -118,8 +40,8 @@ Headers:
  Server: gws
  X-XSS-Protection: 1; mode=block
  X-Frame-Options: SAMEORIGIN
- Set-Cookie: PREF=ID=1111111111111111:FF=0:TM=1446830191:LM=1446830191:V=1:S=W6BGFZ8ld8Adn3eb; expires=Thu, 31-Dec-2015 16:02:17 GMT; path=/; domain=.google.com.br
- Set-Cookie: NID=73=qSciriIc4lXKAcFz91t_c0Om2mSDjW-Mml6h-j4a-FbJE7dLgx5MPujAgDLOrd_FfneVGhXLPgJPLm_xyEoQW04nRBaZyG7rSkq83hkZWw4KOwArLJ1a_PNlr_KgYhmwE2VpI3fY3GWqUxWYDIGUBXLCDPa4arLr; expires=Sat, 07-May-2016 17:16:31 GMT; path=/; domain=.google.com.br; HttpOnly
+ Set-Cookie: PREF=ID=1111111111111111:FF=0:TM=1446991938:LM=1446991938:V=1:S=wT722CJeTI8DR-6b; expires=Thu, 31-Dec-2015 16:02:17 GMT; path=/; domain=.google.com.br
+ Set-Cookie: NID=73=IQTBy8sF0rXq3cu2hb3JHIYqEarBeft7Ciio6uPF2gChn2tj34-kRocXzBwPb6-BLABp0grZvHf7LQnRQ9Z_YhGgzt-oFrns3BMSIGoGn4BWBA48UtsFw4OsB5RZ4ODz1rZb9XjCYemyZw7e5ZJ5pWftv5DPul0; expires=Mon, 09-May-2016 14:12:18 GMT; path=/; domain=.google.com.br; HttpOnly
  Alternate-Protocol: 443:quic,p=1
  Alt-Svc: quic="www.google.com:443"; p="1"; ma=600,quic=":443"; p="1"; ma=600
  Accept-Ranges: none
@@ -137,7 +59,7 @@ CWE: CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross
 CWE URL: https://cwe.mitre.org/data/definitions/79.html
 
 Header Field Name: Set-Cookie
-Value: PREF=ID=1111111111111111:FF=0:TM=1446830191:LM=1446830191:V=1:S=W6BGFZ8ld8Adn3eb; expires=Thu, 31-Dec-2015 16:02:17 GMT; path=/; domain=.google.com.br, NID=73=qSciriIc4lXKAcFz91t_c0Om2mSDjW-Mml6h-j4a-FbJE7dLgx5MPujAgDLOrd_FfneVGhXLPgJPLm_xyEoQW04nRBaZyG7rSkq83hkZWw4KOwArLJ1a_PNlr_KgYhmwE2VpI3fY3GWqUxWYDIGUBXLCDPa4arLr; expires=Sat, 07-May-2016 17:16:31 GMT; path=/; domain=.google.com.br; HttpOnly
+Value: PREF=ID=1111111111111111:FF=0:TM=1446991938:LM=1446991938:V=1:S=wT722CJeTI8DR-6b; expires=Thu, 31-Dec-2015 16:02:17 GMT; path=/; domain=.google.com.br, NID=73=IQTBy8sF0rXq3cu2hb3JHIYqEarBeft7Ciio6uPF2gChn2tj34-kRocXzBwPb6-BLABp0grZvHf7LQnRQ9Z_YhGgzt-oFrns3BMSIGoGn4BWBA48UtsFw4OsB5RZ4ODz1rZb9XjCYemyZw7e5ZJ5pWftv5DPul0; expires=Mon, 09-May-2016 14:12:18 GMT; path=/; domain=.google.com.br; HttpOnly
 Reference: https://tools.ietf.org/html/rfc6265
 Security Description: Cookies have a number of security pitfalls. In particular, cookies encourage developers to rely on ambient authority for authentication, often becoming vulnerable to attacks such as cross-site request forgery. Also, when storing session identifiers in cookies, developers often create session fixation vulnerabilities. Transport-layer encryption, such as that employed in HTTPS, is insufficient to prevent a network attacker from obtaining or altering a victim's cookies because the cookie protocol itself has various vulnerabilities. In addition, by default, cookies do not provide confidentiality or integrity from network attackers, even when used in conjunction with HTTPS.
 Security Reference: https://tools.ietf.org/html/rfc6265#section-8
@@ -200,7 +122,7 @@ CWE: CWE-524: Information Exposure Through Caching
 CWE URL: https://cwe.mitre.org/data/definitions/524.html
 
 Header Field Name: Date
-Value: Fri, 06 Nov 2015 17:16:31 GMT
+Value: Sun, 08 Nov 2015 14:12:18 GMT
 Reference: https://tools.ietf.org/html/rfc7231#section-7.1.1.2
 Security Description:
 Security Reference:
@@ -234,4 +156,85 @@ Security Reference: https://tools.ietf.org/html/rfc7034
 Recommendations:  In 2009 and 2010, many browser vendors ([Microsoft-X-Frame-Options] and [Mozilla-X-Frame-Options]) introduced the use of a non-standard HTTP [RFC2616] header field "X-Frame-Options" to protect against clickjacking. Please check here https://www.owasp.org/index.php/Clickjacking_Defense_Cheat_Sheet what's the best option for your case.
 CWE: CWE-693: Protection Mechanism Failure
 CWE URL: https://cwe.mitre.org/data/definitions/693.html
+
+>> RESPONSE MISSING HEADERS <<
+Header Field Name: Pragma
+Reference: https://tools.ietf.org/html/rfc7234#section-5.4
+Security Description: Caches expose additional potential vulnerabilities, since the contents of the cache represent an attractive target for malicious exploitation.
+Security Reference: https://tools.ietf.org/html/rfc7234#section-8
+Recommendations: The "Pragma" header field allows backwards compatibility with HTTP/1.0 caches, so that clients can specify a "no-cache" request that they will understand (as Cache-Control was not defined until HTTP/1.1). When the Cache-Control header field is also present and understood in a request, Pragma is ignored. Define "Pragma: no-cache" whenever is possible.
+CWE: CWE-524: Information Exposure Through Caching
+CWE URL: https://cwe.mitre.org/data/definitions/524.html
+
+Header Field Name: Public-Key-Pins
+Reference: https://tools.ietf.org/html/rfc7469
+Security Description: HTTP Public Key Pinning (HPKP) is a trust on first use security mechanism which protects HTTPS websites from impersonation using fraudulent certificates issued by compromised certificate authorities. The security context or pinset data is supplied by the site or origin.
+Security Reference: https://tools.ietf.org/html/rfc7469
+Recommendations: Deploying Public Key Pinning (PKP) safely will require operational and organizational maturity due to the risk that hosts may make themselves unavailable by pinning to a set of SPKIs that becomes invalid. With care, host operators can greatly reduce the risk of man-in-the-middle (MITM) attacks and other false- authentication problems for their users without incurring undue risk. PKP is meant to be used together with HTTP Strict Transport Security (HSTS) [RFC6797], but it is possible to pin keys without requiring HSTS.
+CWE: CWE-295: Improper Certificate Validation
+CWE URL: https://cwe.mitre.org/data/definitions/295.html
+
+Header Field Name: Public-Key-Pins-Report-Only
+Reference: https://tools.ietf.org/html/rfc7469
+Security Description: HTTP Public Key Pinning (HPKP) is a trust on first use security mechanism which protects HTTPS websites from impersonation using fraudulent certificates issued by compromised certificate authorities. The security context or pinset data is supplied by the site or origin.
+Security Reference: https://tools.ietf.org/html/rfc7469
+Recommendations: Deploying Public Key Pinning (PKP) safely will require operational and organizational maturity due to the risk that hosts may make themselves unavailable by pinning to a set of SPKIs that becomes invalid. With care, host operators can greatly reduce the risk of man-in-the-middle (MITM) attacks and other false- authentication problems for their users without incurring undue risk. PKP is meant to be used together with HTTP Strict Transport Security (HSTS) [RFC6797], but it is possible to pin keys without requiring HSTS.
+CWE: CWE-295: Improper Certificate Validation
+CWE URL: https://cwe.mitre.org/data/definitions/295.html
+
+Header Field Name: Strict-Transport-Security
+Reference: https://tools.ietf.org/html/rfc6797
+Security Description: HTTP Strict Transport Security (HSTS) is a web security policy mechanism which helps to protect secure HTTPS websites against downgrade attacks and cookie hijacking. It allows web servers to declare that web browsers (or other complying user agents) should only interact with it using secure HTTPS connections, and never via the insecure HTTP protocol. HSTS is an IETF standards track protocol and is specified in RFC 6797.
+Security Reference: https://tools.ietf.org/html/rfc6797
+Recommendations: Please at least read this reference: https://www.owasp.org/index.php/HTTP_Strict_Transport_Security.
+CWE: CWE-311: Missing Encryption of Sensitive Data
+CWE URL: https://cwe.mitre.org/data/definitions/311.html
+
+Header Field Name: Frame-Options
+Reference: https://tools.ietf.org/html/rfc7034
+Security Description: The use of "X-Frame-Options" allows a web page from host B to declare that its content (for example, a button, links, text, etc.) must not be displayed in a frame (<frame> or <iframe>) of another page (e.g., from host A). This is done by a policy declared in the HTTP header and enforced by browser implementations.
+Security Reference: https://tools.ietf.org/html/rfc7034
+Recommendations:  In 2009 and 2010, many browser vendors ([Microsoft-X-Frame-Options] and [Mozilla-X-Frame-Options]) introduced the use of a non-standard HTTP [RFC2616] header field "X-Frame-Options" to protect against clickjacking. Please check here https://www.owasp.org/index.php/Clickjacking_Defense_Cheat_Sheet what's the best option for your case.
+CWE: CWE-693: Protection Mechanism Failure
+CWE URL: https://cwe.mitre.org/data/definitions/693.html
+
+Header Field Name: X-Content-Type-Options
+Reference: http://blogs.msdn.com/b/ie/archive/2008/09/02/ie8-security-part-vi-beta-2-update.aspx
+Security Description: The only defined value, "nosniff", prevents Internet Explorer and Google Chrome from MIME-sniffing a response away from the declared content-type. This also applies to Google Chrome, when downloading extensions. This reduces exposure to drive-by download attacks and sites serving user uploaded content that, by clever naming, could be treated by MSIE as executable or dynamic HTML files.
+Security Reference: https://www.owasp.org/index.php/List_of_useful_HTTP_headers
+Recommendations: Always use the only defined value, "nosniff".
+CWE: CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')
+CWE URL: https://cwe.mitre.org/data/definitions/79.html
+
+Header Field Name: Content-Security-Policy
+Reference: http://www.w3.org/TR/CSP/
+Security Description: Content Security Policy requires careful tuning and precise definition of the policy. If enabled, CSP has significant impact on the way browser renders pages (e.g., inline JavaScript disabled by default and must be explicitly allowed in policy). CSP prevents a wide range of attacks, including Cross-site scripting and other cross-site injections.
+Security Reference: https://www.owasp.org/index.php/List_of_useful_HTTP_headers
+Recommendations: Read the reference http://www.w3.org/TR/CSP/ and set according to your case. This is not a easy job.
+CWE: CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')
+CWE URL: https://cwe.mitre.org/data/definitions/79.html
+
+Header Field Name: X-Content-Security-Policy
+Reference: http://www.w3.org/TR/CSP/
+Security Description: Content Security Policy requires careful tuning and precise definition of the policy. If enabled, CSP has significant impact on the way browser renders pages (e.g., inline JavaScript disabled by default and must be explicitly allowed in policy). CSP prevents a wide range of attacks, including Cross-site scripting and other cross-site injections.
+Security Reference: https://www.owasp.org/index.php/List_of_useful_HTTP_headers
+Recommendations: Read the reference http://www.w3.org/TR/CSP/ and set according to your case. This is not a easy job.
+CWE: CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')
+CWE URL: https://cwe.mitre.org/data/definitions/79.html
+
+Header Field Name: X-WebKit-CSP
+Reference: http://www.w3.org/TR/CSP/
+Security Description: Content Security Policy requires careful tuning and precise definition of the policy. If enabled, CSP has significant impact on the way browser renders pages (e.g., inline JavaScript disabled by default and must be explicitly allowed in policy). CSP prevents a wide range of attacks, including Cross-site scripting and other cross-site injections.
+Security Reference: https://www.owasp.org/index.php/List_of_useful_HTTP_headers
+Recommendations: Read the reference http://www.w3.org/TR/CSP/ and set according to your case. This is not a easy job.
+CWE: CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')
+CWE URL: https://cwe.mitre.org/data/definitions/79.html
+
+Header Field Name: Content-Security-Policy-Report-Only
+Reference: http://www.w3.org/TR/CSP/
+Security Description: Like Content-Security-Policy, but only reports. Useful during implementation, tuning and testing efforts.
+Security Reference: https://www.owasp.org/index.php/List_of_useful_HTTP_headers
+Recommendations: Read the reference http://www.w3.org/TR/CSP/ and set according to your case. This is not a easy job.
+CWE: CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')
+CWE URL: https://cwe.mitre.org/data/definitions/79.html
 ```

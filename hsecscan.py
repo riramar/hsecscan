@@ -12,7 +12,9 @@ class SmartRedirectHandler(urllib2.HTTPRedirectHandler):
         print_response(req.get_full_url(), code, headers)
         print '>> REDIRECT HEADERS DETAILS <<'
         for header in headers.items():
-            check_header(header, header[1])
+            check_header(header)
+        print '>> REDIRECT MISSING HEADERS <<'
+        missing_headers(headers.items())
         return newreq
 
 def print_database(headers):
@@ -38,7 +40,7 @@ def print_response(url, code, headers):
         print '', line
     print ''
 
-def check_header(header, header_value):
+def check_header(header):
     conn = sqlite3.connect('hsecscan.db')
     cur = conn.cursor()
     t = (header[0],)
@@ -48,11 +50,27 @@ def check_header(header, header_value):
         col_index = 0
         for cel in row:
             if col_names[col_index] == 'Header Field Name':
-                print col_names[col_index] + ':', cel, '\nValue: ' + header_value
+                print col_names[col_index] + ':', cel, '\nValue: ' + header[1]
             else:
                 print col_names[col_index] + ':', cel
             col_index += 1
         print ''
+    cur.close()
+    conn.close()
+
+def missing_headers(headers):
+    conn = sqlite3.connect('hsecscan.db')
+    cur = conn.cursor()
+    cur.execute('SELECT "Header Field Name", "Reference", "Security Description", "Security Reference", "Recommendations", "CWE", "CWE URL" FROM headers WHERE "Required" = "Y"')
+    col_names = [cn[0] for cn in cur.description]
+    header_names = [name[0] for name in headers]
+    for row in cur:
+        if row[0].lower() not in (name.lower() for name in header_names):
+            col_index = 0
+            for cel in row:
+                print col_names[col_index] + ':', cel
+                col_index += 1
+            print ''
     cur.close()
     conn.close()
 
@@ -69,7 +87,9 @@ def scan(url, redirect, useragent):
     print_response(response.geturl(), response.getcode(), response.info())
     print '>> RESPONSE HEADERS DETAILS <<'
     for header in response.info().items():
-        check_header(header, header[1])
+        check_header(header)
+    print '>> RESPONSE MISSING HEADERS <<'
+    missing_headers(response.info().items())
 
 def check_url(url):
     url_checked = urlparse(url)
