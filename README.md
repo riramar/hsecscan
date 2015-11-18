@@ -11,7 +11,7 @@ Python 2.x
 ```
 $ ./hsecscan.py 
 usage: hsecscan.py [-h] [-P] [-p] [-u URL] [-R] [-U User-Agent]
-                   [-d "POST data"] [-x PROXY]
+                   [-d 'POST data'] [-x PROXY]
 
 A security scanner for HTTP response headers.
 
