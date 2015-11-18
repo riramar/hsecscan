@@ -4,6 +4,8 @@ import argparse
 import sqlite3
 from urlparse import urlparse
 import urllib2
+import urllib
+import json
 
 class SmartRedirectHandler(urllib2.HTTPRedirectHandler):
     def redirect_request(self, req, fp, code, msg, headers, newurl):
@@ -74,12 +76,21 @@ def missing_headers(headers):
     cur.close()
     conn.close()
 
-def scan(url, redirect, useragent):
+def scan(url, redirect, useragent, postdata, proxy):
     request = urllib2.Request(url.geturl())
     request.add_header('User-Agent', useragent)
     request.add_header('Origin', 'http://hsecscan.com')
+    if postdata:
+        request.add_data(urllib.urlencode(postdata))
+    if proxy:
+        proxy = urllib2.ProxyHandler({'http': proxy})
+        opener = urllib2.build_opener(proxy)
+        urllib2.install_opener(opener)
     if redirect:
-        opener = urllib2.build_opener(SmartRedirectHandler())
+        if proxy:
+            opener = urllib2.build_opener(proxy, SmartRedirectHandler())
+        else:
+            opener = urllib2.build_opener(SmartRedirectHandler())
         response = opener.open(request)
     else:
         response = urllib2.urlopen(request)
@@ -94,7 +105,7 @@ def scan(url, redirect, useragent):
 def check_url(url):
     url_checked = urlparse(url)
     if ((url_checked.scheme != 'http') & (url_checked.scheme != 'https')) | (url_checked.netloc == ''):
-        raise argparse.ArgumentTypeError('Invalid %s URL (Example: https://www.hsecscan.com/path).' % url)
+        raise argparse.ArgumentTypeError('Invalid %s URL (example: https://www.hsecscan.com/path).' % url)
     return url_checked
 
 def main():
@@ -104,13 +115,15 @@ def main():
     parser.add_argument('-u', '--URL', type=check_url, help='The URL to be scanned.')
     parser.add_argument('-R', '--redirect', action='store_true', help='Print redirect headers.')
     parser.add_argument('-U', '--useragent', metavar='User-Agent', default='hsecscan', help='Set the User-Agent request header (default: hsecscan).')
+    parser.add_argument('-d', '--postdata', metavar='"POST data"', type=json.loads, help='Set the POST data (between single quotes) otherwise will be a GET (example: \'{ "q":"query string", "foo":"bar" }\').')
+    parser.add_argument('-x', '--proxy', help='Set the proxy server (example: 192.168.1.1:8080).')
     args = parser.parse_args()
     if args.database == True:
         print_database(False)
     elif args.headers == True:
         print_database(True)
-    elif args.URL != None:
-        scan(args.URL, args.redirect, args.useragent)
+    elif args.URL:
+        scan(args.URL, args.redirect, args.useragent, args.postdata, args.proxy)
     else:
         parser.print_help()
 

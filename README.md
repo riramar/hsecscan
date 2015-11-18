@@ -11,6 +11,7 @@ Python 2.x
 ```
 $ ./hsecscan.py 
 usage: hsecscan.py [-h] [-P] [-p] [-u URL] [-R] [-U User-Agent]
+                   [-d "POST data"] [-x PROXY]
 
 A security scanner for HTTP response headers.
 
@@ -22,6 +23,12 @@ optional arguments:
   -R, --redirect        Print redirect headers.
   -U User-Agent, --useragent User-Agent
                         Set the User-Agent request header (default: hsecscan).
+  -d "POST data", --postdata "POST data"
+                        Set the POST data (between single quotes) otherwise
+                        will be a GET (example: '{ "q":"query string",
+                        "foo":"bar" }').
+  -x PROXY, --proxy PROXY
+                        Set the proxy server (example: 192.168.1.1:8080).
 ```
 
 # Example
