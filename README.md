@@ -23,7 +23,7 @@ optional arguments:
   -R, --redirect        Print redirect headers.
   -U User-Agent, --useragent User-Agent
                         Set the User-Agent request header (default: hsecscan).
-  -d "POST data", --postdata "POST data"
+  -d 'POST data', --postdata 'POST data'
                         Set the POST data (between single quotes) otherwise
                         will be a GET (example: '{ "q":"query string",
                         "foo":"bar" }').

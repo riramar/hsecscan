@@ -115,7 +115,7 @@ def main():
     parser.add_argument('-u', '--URL', type=check_url, help='The URL to be scanned.')
     parser.add_argument('-R', '--redirect', action='store_true', help='Print redirect headers.')
     parser.add_argument('-U', '--useragent', metavar='User-Agent', default='hsecscan', help='Set the User-Agent request header (default: hsecscan).')
-    parser.add_argument('-d', '--postdata', metavar='"POST data"', type=json.loads, help='Set the POST data (between single quotes) otherwise will be a GET (example: \'{ "q":"query string", "foo":"bar" }\').')
+    parser.add_argument('-d', '--postdata', metavar='\'POST data\'', type=json.loads, help='Set the POST data (between single quotes) otherwise will be a GET (example: \'{ "q":"query string", "foo":"bar" }\').')
     parser.add_argument('-x', '--proxy', help='Set the proxy server (example: 192.168.1.1:8080).')
     args = parser.parse_args()
     if args.database == True:
