@@ -84,16 +84,16 @@ def scan(url, redirect, useragent, postdata, proxy):
         request.add_data(urllib.urlencode(postdata))
     if proxy:
         proxy = urllib2.ProxyHandler({'http': proxy})
-        opener = urllib2.build_opener(proxy)
-        urllib2.install_opener(opener)
-    if redirect:
-        if proxy:
+        if redirect:
             opener = urllib2.build_opener(proxy, SmartRedirectHandler())
         else:
-            opener = urllib2.build_opener(SmartRedirectHandler())
-        response = opener.open(request)
+            opener = urllib2.build_opener(proxy)
+        urllib2.install_opener(opener)
     else:
-        response = urllib2.urlopen(request)
+        if redirect:
+            opener = urllib2.build_opener(SmartRedirectHandler())
+            urllib2.install_opener(opener)
+    response = urllib2.urlopen(request)
     print '>> RESPONSE INFO <<'
     print_response(response.geturl(), response.getcode(), response.info())
     print '>> RESPONSE HEADERS DETAILS <<'
