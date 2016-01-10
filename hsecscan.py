@@ -83,7 +83,7 @@ def scan(url, redirect, useragent, postdata, proxy):
     if postdata:
         request.add_data(urllib.urlencode(postdata))
     if proxy:
-        proxy = urllib2.ProxyHandler({'http': proxy})
+        proxy = urllib2.ProxyHandler({'http': proxy, 'https': proxy})
         if redirect:
             opener = urllib2.build_opener(proxy, SmartRedirectHandler())
         else:
