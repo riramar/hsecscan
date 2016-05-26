@@ -11,7 +11,7 @@ Python 2.x
 ```
 $ ./hsecscan.py 
 usage: hsecscan.py [-h] [-P] [-p] [-u URL] [-R] [-U User-Agent]
-                   [-d 'POST data'] [-x PROXY]
+                   [-d 'POST data'] [-x PROXY] [-a]
 
 A security scanner for HTTP response headers.
 
@@ -29,6 +29,8 @@ optional arguments:
                         "foo":"bar" }').
   -x PROXY, --proxy PROXY
                         Set the proxy server (example: 192.168.1.1:8080).
+  -a, --all             Print details for all response headers. Good for check
+                        the related RFC.
 ```
 
 # Example
@@ -36,21 +38,20 @@ optional arguments:
 ```
 $ ./hsecscan.py -u https://google.com
 >> RESPONSE INFO <<
-URL: https://www.google.com.br/?gfe_rd=cr&ei=Qlg_Vu-WHqWX8QeHraH4DQ
+URL: https://www.google.com.br/?gfe_rd=cr&ei=GF5HV4ucH7DL8geg-aK4Dw
 Code: 200
 Headers:
- Date: Sun, 08 Nov 2015 14:12:18 GMT
+ Date: Thu, 26 May 2016 20:35:36 GMT
  Expires: -1
  Cache-Control: private, max-age=0
  Content-Type: text/html; charset=ISO-8859-1
- P3P: CP="This is not a P3P policy! See http://www.google.com/support/accounts/bin/answer.py?hl=en&answer=151657 for more info."
+ P3P: CP="This is not a P3P policy! See https://www.google.com/support/accounts/answer/151657?hl=en for more info."
  Server: gws
  X-XSS-Protection: 1; mode=block
  X-Frame-Options: SAMEORIGIN
- Set-Cookie: PREF=ID=1111111111111111:FF=0:TM=1446991938:LM=1446991938:V=1:S=wT722CJeTI8DR-6b; expires=Thu, 31-Dec-2015 16:02:17 GMT; path=/; domain=.google.com.br
- Set-Cookie: NID=73=IQTBy8sF0rXq3cu2hb3JHIYqEarBeft7Ciio6uPF2gChn2tj34-kRocXzBwPb6-BLABp0grZvHf7LQnRQ9Z_YhGgzt-oFrns3BMSIGoGn4BWBA48UtsFw4OsB5RZ4ODz1rZb9XjCYemyZw7e5ZJ5pWftv5DPul0; expires=Mon, 09-May-2016 14:12:18 GMT; path=/; domain=.google.com.br; HttpOnly
- Alternate-Protocol: 443:quic,p=1
- Alt-Svc: quic="www.google.com:443"; p="1"; ma=600,quic=":443"; p="1"; ma=600
+ Set-Cookie: NID=79=hDENeVI81zBYDtmqeCKAc5mxg6AQ-S24ahNqZ8El37rlJmYwUtgJg4vXAya7jKSyB2VqYI33JlLPacGonMPajpcDpUkb7mMtWMbNwIZQ8CyQBA1qXsRhjlLXU_4WExlI; expires=Fri, 25-Nov-2016 20:35:36 GMT; path=/; domain=.google.com.br; HttpOnly
+ Alternate-Protocol: 443:quic
+ Alt-Svc: quic=":443"; ma=2592000; v="34,33,32,31,30,29,28,27,26,25"
  Accept-Ranges: none
  Vary: Accept-Encoding
  Connection: close
@@ -66,7 +67,7 @@ CWE: CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross
 CWE URL: https://cwe.mitre.org/data/definitions/79.html
 
 Header Field Name: Set-Cookie
-Value: PREF=ID=1111111111111111:FF=0:TM=1446991938:LM=1446991938:V=1:S=wT722CJeTI8DR-6b; expires=Thu, 31-Dec-2015 16:02:17 GMT; path=/; domain=.google.com.br, NID=73=IQTBy8sF0rXq3cu2hb3JHIYqEarBeft7Ciio6uPF2gChn2tj34-kRocXzBwPb6-BLABp0grZvHf7LQnRQ9Z_YhGgzt-oFrns3BMSIGoGn4BWBA48UtsFw4OsB5RZ4ODz1rZb9XjCYemyZw7e5ZJ5pWftv5DPul0; expires=Mon, 09-May-2016 14:12:18 GMT; path=/; domain=.google.com.br; HttpOnly
+Value: NID=79=hDENeVI81zBYDtmqeCKAc5mxg6AQ-S24ahNqZ8El37rlJmYwUtgJg4vXAya7jKSyB2VqYI33JlLPacGonMPajpcDpUkb7mMtWMbNwIZQ8CyQBA1qXsRhjlLXU_4WExlI; expires=Fri, 25-Nov-2016 20:35:36 GMT; path=/; domain=.google.com.br; HttpOnly
 Reference: https://tools.ietf.org/html/rfc6265
 Security Description: Cookies have a number of security pitfalls. In particular, cookies encourage developers to rely on ambient authority for authentication, often becoming vulnerable to attacks such as cross-site request forgery. Also, when storing session identifiers in cookies, developers often create session fixation vulnerabilities. Transport-layer encryption, such as that employed in HTTPS, is insufficient to prevent a network attacker from obtaining or altering a victim's cookies because the cookie protocol itself has various vulnerabilities. In addition, by default, cookies do not provide confidentiality or integrity from network attackers, even when used in conjunction with HTTPS.
 Security Reference: https://tools.ietf.org/html/rfc6265#section-8
@@ -83,24 +84,6 @@ Recommendations: Servers ought to ignore, coalesce, or reject egregious range re
 CWE: CWE-400: Uncontrolled Resource Consumption ('Resource Exhaustion')
 CWE URL: https://cwe.mitre.org/data/definitions/400.html
 
-Header Field Name: Expires
-Value: -1
-Reference: https://tools.ietf.org/html/rfc7234#section-5.3
-Security Description:
-Security Reference:
-Recommendations:
-CWE:
-CWE URL:
-
-Header Field Name: Vary
-Value: Accept-Encoding
-Reference: https://tools.ietf.org/html/rfc7231#section-7.1.4
-Security Description:
-Security Reference:
-Recommendations:
-CWE:
-CWE URL:
-
 Header Field Name: Server
 Value: gws
 Reference: https://tools.ietf.org/html/rfc7231#section-7.4.2
@@ -109,15 +92,6 @@ Security Reference: https://tools.ietf.org/html/rfc7231#section-7.4.2
 Recommendations: An origin server SHOULD NOT generate a Server field containing needlessly fine-grained detail and SHOULD limit the addition of subproducts by third parties.
 CWE: CWE-200: Information Exposure
 CWE URL: https://cwe.mitre.org/data/definitions/200.html
-
-Header Field Name: Connection
-Value: close
-Reference: https://tools.ietf.org/html/rfc7230#section-6.1
-Security Description:
-Security Reference:
-Recommendations:
-CWE:
-CWE URL:
 
 Header Field Name: Cache-Control
 Value: private, max-age=0
@@ -128,17 +102,8 @@ Recommendations: Do not store unnecessarily sensitive information in the cache.
 CWE: CWE-524: Information Exposure Through Caching
 CWE URL: https://cwe.mitre.org/data/definitions/524.html
 
-Header Field Name: Date
-Value: Sun, 08 Nov 2015 14:12:18 GMT
-Reference: https://tools.ietf.org/html/rfc7231#section-7.1.1.2
-Security Description:
-Security Reference:
-Recommendations:
-CWE:
-CWE URL:
-
 Header Field Name: P3P
-Value: CP="This is not a P3P policy! See http://www.google.com/support/accounts/bin/answer.py?hl=en&answer=151657 for more info."
+Value: CP="This is not a P3P policy! See https://www.google.com/support/accounts/answer/151657?hl=en for more info."
 Reference: http://www.w3.org/TR/P3P11/#syntax_ext
 Security Description: While P3P itself does not include security mechanisms, it is intended to be used in conjunction with security tools. Users' personal information should always be protected with reasonable security safeguards in keeping with the sensitivity of the information.
 Security Reference: http://www.w3.org/TR/P3P11/#principles_security
