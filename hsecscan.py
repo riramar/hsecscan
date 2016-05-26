@@ -46,7 +46,10 @@ def check_header(header):
     conn = sqlite3.connect('hsecscan.db')
     cur = conn.cursor()
     t = (header[0],)
-    cur.execute('SELECT "Header Field Name", "Reference", "Security Description", "Security Reference", "Recommendations", "CWE", "CWE URL" FROM headers WHERE "Header Field Name" = ? COLLATE NOCASE', t)
+    if allheaders:
+        cur.execute('SELECT "Header Field Name", "Reference", "Security Description", "Security Reference", "Recommendations", "CWE", "CWE URL" FROM headers WHERE "Header Field Name" = ? COLLATE NOCASE', t)
+    else:
+        cur.execute('SELECT "Header Field Name", "Reference", "Security Description", "Security Reference", "Recommendations", "CWE", "CWE URL" FROM headers WHERE "Enable" = "Y" AND "Header Field Name" = ? COLLATE NOCASE', t)
     col_names = [cn[0] for cn in cur.description]
     for row in cur:
         col_index = 0
@@ -117,12 +120,15 @@ def main():
     parser.add_argument('-U', '--useragent', metavar='User-Agent', default='hsecscan', help='Set the User-Agent request header (default: hsecscan).')
     parser.add_argument('-d', '--postdata', metavar='\'POST data\'', type=json.loads, help='Set the POST data (between single quotes) otherwise will be a GET (example: \'{ "q":"query string", "foo":"bar" }\').')
     parser.add_argument('-x', '--proxy', help='Set the proxy server (example: 192.168.1.1:8080).')
+    parser.add_argument('-a', '--all', action='store_true', help='Print details for all response headers. Good for check the related RFC.')
     args = parser.parse_args()
     if args.database == True:
         print_database(False)
     elif args.headers == True:
         print_database(True)
     elif args.URL:
+        global allheaders
+        allheaders = args.all
         scan(args.URL, args.redirect, args.useragent, args.postdata, args.proxy)
     else:
         parser.print_help()
