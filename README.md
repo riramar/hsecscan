@@ -4,7 +4,16 @@ A security scanner for HTTP response headers.</p>
 
 # Requirements
 
-Python 2.x
+* Python 2.x
+
+## Python Modules
+
+* argparse
+* sqlite3
+* urlparse
+* urllib2
+* urllib
+* json
 
 # Usage
 
