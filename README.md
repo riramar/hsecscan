@@ -1,6 +1,6 @@
 # hsecscan
 
-A security scanner for HTTP response headers.</p>
+A security scanner for HTTP response headers.
 
 # Requirements
 
@@ -8,6 +8,7 @@ A security scanner for HTTP response headers.</p>
 
 ## Python Modules
 
+* os.path
 * argparse
 * sqlite3
 * urlparse
@@ -19,7 +20,7 @@ A security scanner for HTTP response headers.</p>
 
 ```
 $ ./hsecscan.py 
-usage: hsecscan.py [-h] [-P] [-p] [-u URL] [-R] [-U User-Agent]
+usage: hsecscan.py [-h] [-P] [-p] [-u URL] [-R] [-U User-Agent] [-D DBFILE]
                    [-d 'POST data'] [-x PROXY] [-a]
 
 A security scanner for HTTP response headers.
@@ -32,6 +33,8 @@ optional arguments:
   -R, --redirect        Print redirect headers.
   -U User-Agent, --useragent User-Agent
                         Set the User-Agent request header (default: hsecscan).
+  -D DBFILE, --dbfile DBFILE
+                        Set the database file (default: hsecscan.db).
   -d 'POST data', --postdata 'POST data'
                         Set the POST data (between single quotes) otherwise
                         will be a GET (example: '{ "q":"query string",
