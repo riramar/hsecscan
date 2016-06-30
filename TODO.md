@@ -1,5 +1,6 @@
 # My todo list
 
+* pip installation
 * Remove duplicated missing required headers with different names
 * Check missing headers by HTTPS or HTTP
 * Add option to detect bad practice (eg. Content-Type without charset=utf-8)
