@@ -7,6 +7,7 @@ from urlparse import urlparse
 import urllib2
 import urllib
 import json
+import ssl
 
 class SmartRedirectHandler(urllib2.HTTPRedirectHandler):
     def redirect_request(self, req, fp, code, msg, headers, newurl):
@@ -81,6 +82,7 @@ def missing_headers(headers, dbfile):
     conn.close()
 
 def scan(url, redirect, useragent, postdata, proxy, dbfile):
+	
     request = urllib2.Request(url.geturl())
     request.add_header('User-Agent', useragent)
     request.add_header('Origin', 'http://hsecscan.com')
@@ -97,7 +99,11 @@ def scan(url, redirect, useragent, postdata, proxy, dbfile):
         if redirect:
             opener = urllib2.build_opener(SmartRedirectHandler())
             urllib2.install_opener(opener)
-    response = urllib2.urlopen(request)
+    ctx = ssl.create_default_context()
+    ctx.check_hostname = False
+    ctx.verify_mode = ssl.CERT_NONE
+
+    response = urllib2.urlopen(request,context=ctx)
     print '>> RESPONSE INFO <<'
     print_response(response.geturl(), response.getcode(), response.info())
     print '>> RESPONSE HEADERS DETAILS <<'
