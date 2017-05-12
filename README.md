@@ -15,13 +15,14 @@ A security scanner for HTTP response headers.
 * urllib2
 * urllib
 * json
+* ssl
 
 # Usage
 
 ```
 $ ./hsecscan.py 
 usage: hsecscan.py [-h] [-P] [-p] [-u URL] [-R] [-U User-Agent] [-D DBFILE]
-                   [-d 'POST data'] [-x PROXY] [-a]
+                   [-d 'POST data'] [-x PROXY] [-a] [-c]
 
 A security scanner for HTTP response headers.
 
@@ -43,6 +44,7 @@ optional arguments:
                         Set the proxy server (example: 192.168.1.1:8080).
   -a, --all             Print details for all response headers. Good for check
                         the related RFC.
+  -c, --certverify      Disable SSL certificate verification
 ```
 
 # Example
