@@ -7,6 +7,7 @@ from urlparse import urlparse
 import urllib2
 import urllib
 import json
+import ssl
 
 class SmartRedirectHandler(urllib2.HTTPRedirectHandler):
     def redirect_request(self, req, fp, code, msg, headers, newurl):
@@ -80,24 +81,16 @@ def missing_headers(headers, dbfile):
     cur.close()
     conn.close()
 
-def scan(url, redirect, useragent, postdata, proxy, dbfile):
-    request = urllib2.Request(url.geturl())
-    request.add_header('User-Agent', useragent)
-    request.add_header('Origin', 'http://hsecscan.com')
+def scan(url, redirect, useragent, postdata, proxy, dbfile,certverify):
+    request = urllib2.build_opener(disable_cert_check(certverify))
+    request.addheaders = [('User-Agent', useragent),('Origin', 'http://hsecscan.com')]
     if postdata:
         request.add_data(urllib.urlencode(postdata))
     if proxy:
-        proxy = urllib2.ProxyHandler({'http': proxy, 'https': proxy})
-        if redirect:
-            opener = urllib2.build_opener(proxy, SmartRedirectHandler())
-        else:
-            opener = urllib2.build_opener(proxy)
-        urllib2.install_opener(opener)
-    else:
-        if redirect:
-            opener = urllib2.build_opener(SmartRedirectHandler())
-            urllib2.install_opener(opener)
-    response = urllib2.urlopen(request)
+        request.add_handler(urllib2.ProxyHandler({'http': proxy, 'https': proxy}))
+    if redirect:
+        request.add_handler(SmartRedirectHandler())
+    response = request.open(url)
     print '>> RESPONSE INFO <<'
     print_response(response.geturl(), response.getcode(), response.info())
     print '>> RESPONSE HEADERS DETAILS <<'
@@ -110,7 +103,7 @@ def check_url(url):
     url_checked = urlparse(url)
     if ((url_checked.scheme != 'http') & (url_checked.scheme != 'https')) | (url_checked.netloc == ''):
         raise argparse.ArgumentTypeError('Invalid %s URL (example: https://www.hsecscan.com/path).' % url)
-    return url_checked
+    return url
 
 def is_valid_file(parser, dbfile):
     if not os.path.exists(dbfile):
@@ -119,6 +112,15 @@ def is_valid_file(parser, dbfile):
     if  fdb.read(11) != 'SQLite form':
         raise argparse.ArgumentTypeError('The file %s is not a SQLite DB.' % dbfile)
     return dbfile
+
+def disable_cert_check(cert_verify_disabled):
+    if cert_verify_disabled:
+        context = ssl.create_default_context()
+        context.check_hostname=False
+        context.verify_mode=ssl.CERT_NONE
+    else:
+        context = ssl.create_default_context()
+    return urllib2.HTTPSHandler(context=context)
 
 def main():
     parser = argparse.ArgumentParser(description='A security scanner for HTTP response headers.')
@@ -131,6 +133,7 @@ def main():
     parser.add_argument('-d', '--postdata', metavar='\'POST data\'', type=json.loads, help='Set the POST data (between single quotes) otherwise will be a GET (example: \'{ "q":"query string", "foo":"bar" }\').')
     parser.add_argument('-x', '--proxy', help='Set the proxy server (example: 192.168.1.1:8080).')
     parser.add_argument('-a', '--all', action='store_true', help='Print details for all response headers. Good for check the related RFC.')
+    parser.add_argument('-c', '--certverify', action='store_true', help='Disable SSL certificate verification.')
     args = parser.parse_args()
     if args.database == True:
         print_database(False, args.dbfile)
@@ -139,7 +142,7 @@ def main():
     elif args.URL:
         global allheaders
         allheaders = args.all
-        scan(args.URL, args.redirect, args.useragent, args.postdata, args.proxy, args.dbfile)
+        scan(args.URL, args.redirect, args.useragent, args.postdata, args.proxy, args.dbfile, args.certverify)
     else:
         parser.print_help()
 
