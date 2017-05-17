@@ -20,7 +20,7 @@ class SmartRedirectHandler(urllib2.HTTPRedirectHandler):
         missing_headers(headers.items())
         return newreq
 
-def print_database(headers, dbfile):
+def print_database(headers):
     conn = sqlite3.connect(dbfile)
     cur = conn.cursor()
     cur.execute('SELECT * FROM headers')
@@ -43,7 +43,7 @@ def print_response(url, code, headers):
         print '', line
     print ''
 
-def check_header(header, dbfile):
+def check_header(header):
     conn = sqlite3.connect(dbfile)
     cur = conn.cursor()
     t = (header[0],)
@@ -64,7 +64,7 @@ def check_header(header, dbfile):
     cur.close()
     conn.close()
 
-def missing_headers(headers, dbfile):
+def missing_headers(headers):
     conn = sqlite3.connect(dbfile)
     cur = conn.cursor()
     cur.execute('SELECT "Header Field Name", "Reference", "Security Description", "Security Reference", "Recommendations", "CWE", "CWE URL" FROM headers WHERE "Required" = "Y"')
@@ -80,7 +80,7 @@ def missing_headers(headers, dbfile):
     cur.close()
     conn.close()
 
-def scan(url, redirect, useragent, postdata, proxy, dbfile):
+def scan(url, redirect, useragent, postdata, proxy):
     request = urllib2.Request(url.geturl())
     request.add_header('User-Agent', useragent)
     request.add_header('Origin', 'http://hsecscan.com')
@@ -102,9 +102,9 @@ def scan(url, redirect, useragent, postdata, proxy, dbfile):
     print_response(response.geturl(), response.getcode(), response.info())
     print '>> RESPONSE HEADERS DETAILS <<'
     for header in response.info().items():
-        check_header(header, dbfile)
+        check_header(header)
     print '>> RESPONSE MISSING HEADERS <<'
-    missing_headers(response.info().items(), dbfile)
+    missing_headers(response.info().items())
 
 def check_url(url):
     url_checked = urlparse(url)
@@ -132,14 +132,16 @@ def main():
     parser.add_argument('-x', '--proxy', help='Set the proxy server (example: 192.168.1.1:8080).')
     parser.add_argument('-a', '--all', action='store_true', help='Print details for all response headers. Good for check the related RFC.')
     args = parser.parse_args()
+    global dbfile
+    dbfile = args.dbfile
     if args.database == True:
-        print_database(False, args.dbfile)
+        print_database(False)
     elif args.headers == True:
-        print_database(True, args.dbfile)
+        print_database(True)
     elif args.URL:
         global allheaders
         allheaders = args.all
-        scan(args.URL, args.redirect, args.useragent, args.postdata, args.proxy, args.dbfile)
+        scan(args.URL, args.redirect, args.useragent, args.postdata, args.proxy)
     else:
         parser.print_help()
 
