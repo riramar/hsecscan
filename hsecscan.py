@@ -7,8 +7,9 @@ from urlparse import urlparse
 import urllib2
 import urllib
 import json
+import ssl
 
-class SmartRedirectHandler(urllib2.HTTPRedirectHandler):
+class RedirectHandler(urllib2.HTTPRedirectHandler):
     def redirect_request(self, req, fp, code, msg, headers, newurl):
         newreq = urllib2.HTTPRedirectHandler.redirect_request(self, req, fp, code, msg, headers, newurl)
         print '>> REDIRECT INFO <<'
@@ -80,23 +81,21 @@ def missing_headers(headers):
     cur.close()
     conn.close()
 
-def scan(url, redirect, useragent, postdata, proxy):
+def scan(url, redirect, insecure, useragent, postdata, proxy):
     request = urllib2.Request(url.geturl())
     request.add_header('User-Agent', useragent)
     request.add_header('Origin', 'http://hsecscan.com')
     if postdata:
         request.add_data(urllib.urlencode(postdata))
+    build = [urllib2.HTTPHandler()]
+    if redirect:
+        build.append(RedirectHandler())
     if proxy:
-        proxy = urllib2.ProxyHandler({'http': proxy, 'https': proxy})
-        if redirect:
-            opener = urllib2.build_opener(proxy, SmartRedirectHandler())
-        else:
-            opener = urllib2.build_opener(proxy)
-        urllib2.install_opener(opener)
-    else:
-        if redirect:
-            opener = urllib2.build_opener(SmartRedirectHandler())
-            urllib2.install_opener(opener)
+        build.append(urllib2.ProxyHandler({'http': proxy, 'https': proxy}))
+    if insecure:
+        context = ssl._create_unverified_context()
+        build.append(urllib2.HTTPSHandler(context=context))
+    urllib2.install_opener(urllib2.build_opener(*build))
     response = urllib2.urlopen(request)
     print '>> RESPONSE INFO <<'
     print_response(response.geturl(), response.getcode(), response.info())
@@ -126,6 +125,7 @@ def main():
     parser.add_argument('-p', '--headers', action='store_true', help='Print only the enabled response headers from database.')
     parser.add_argument('-u', '--URL', type=check_url, help='The URL to be scanned.')
     parser.add_argument('-R', '--redirect', action='store_true', help='Print redirect headers.')
+    parser.add_argument('-i', '--insecure', action='store_true', help='Disable certificate verification.')
     parser.add_argument('-U', '--useragent', metavar='User-Agent', default='hsecscan', help='Set the User-Agent request header (default: hsecscan).')
     parser.add_argument('-D', '--dbfile', dest="dbfile", default='hsecscan.db', type=lambda x: is_valid_file(parser, x), help='Set the database file (default: hsecscan.db).')
     parser.add_argument('-d', '--postdata', metavar='\'POST data\'', type=json.loads, help='Set the POST data (between single quotes) otherwise will be a GET (example: \'{ "q":"query string", "foo":"bar" }\').')
@@ -141,7 +141,7 @@ def main():
     elif args.URL:
         global allheaders
         allheaders = args.all
-        scan(args.URL, args.redirect, args.useragent, args.postdata, args.proxy)
+        scan(args.URL, args.redirect, args.insecure, args.useragent, args.postdata, args.proxy)
     else:
         parser.print_help()
 
