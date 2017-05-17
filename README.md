@@ -20,8 +20,8 @@ A security scanner for HTTP response headers.
 
 ```
 $ ./hsecscan.py 
-usage: hsecscan.py [-h] [-P] [-p] [-u URL] [-R] [-U User-Agent] [-D DBFILE]
-                   [-d 'POST data'] [-x PROXY] [-a]
+usage: hsecscan.py [-h] [-P] [-p] [-u URL] [-R] [-i] [-U User-Agent]
+                   [-D DBFILE] [-d 'POST data'] [-x PROXY] [-a]
 
 A security scanner for HTTP response headers.
 
@@ -31,6 +31,7 @@ optional arguments:
   -p, --headers         Print only the enabled response headers from database.
   -u URL, --URL URL     The URL to be scanned.
   -R, --redirect        Print redirect headers.
+  -i, --insecure        Disable certificate verification.
   -U User-Agent, --useragent User-Agent
                         Set the User-Agent request header (default: hsecscan).
   -D DBFILE, --dbfile DBFILE
