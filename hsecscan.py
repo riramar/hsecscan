@@ -18,7 +18,7 @@ class RedirectHandler(urllib2.HTTPRedirectHandler):
         for header in headers.items():
             check_header(header)
         print '>> REDIRECT MISSING HEADERS <<'
-        missing_headers(headers.items())
+        missing_headers(headers.items(), urlparse(newurl).scheme)
         return newreq
 
 def print_database(headers):
