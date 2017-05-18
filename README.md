@@ -15,6 +15,7 @@ A security scanner for HTTP response headers.
 * urllib2
 * urllib
 * json
+* ssl
 
 # Usage
 
