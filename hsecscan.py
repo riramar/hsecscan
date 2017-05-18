@@ -65,14 +65,14 @@ def check_header(header):
     cur.close()
     conn.close()
 
-def missing_headers(headers):
+def missing_headers(headers, scheme):
     conn = sqlite3.connect(dbfile)
     cur = conn.cursor()
-    cur.execute('SELECT "Header Field Name", "Reference", "Security Description", "Security Reference", "Recommendations", "CWE", "CWE URL" FROM headers WHERE "Required" = "Y"')
+    cur.execute('SELECT "Header Field Name", "Reference", "Security Description", "Security Reference", "Recommendations", "CWE", "CWE URL", "HTTPS" FROM headers WHERE "Required" = "Y"')
     col_names = [cn[0] for cn in cur.description]
     header_names = [name[0] for name in headers]
     for row in cur:
-        if row[0].lower() not in (name.lower() for name in header_names):
+        if (row[0].lower() not in (name.lower() for name in header_names)) & ((scheme == 'https') | (row[7] != 'Y')):
             col_index = 0
             for cel in row:
                 print col_names[col_index] + ':', cel
@@ -103,7 +103,7 @@ def scan(url, redirect, insecure, useragent, postdata, proxy):
     for header in response.info().items():
         check_header(header)
     print '>> RESPONSE MISSING HEADERS <<'
-    missing_headers(response.info().items())
+    missing_headers(response.info().items(), url.scheme)
 
 def check_url(url):
     url_checked = urlparse(url)
