@@ -21,8 +21,9 @@ A security scanner for HTTP response headers.
 
 ```
 $ ./hsecscan.py 
-usage: hsecscan.py [-h] [-P] [-p] [-u URL] [-R] [-i] [-U User-Agent]
-                   [-D DBFILE] [-d 'POST data'] [-x PROXY] [-a]
+usage: hsecscan.py [-h] [-P] [-p] [-H Header] [-u URL] [-R] [-i]
+                   [-U User-Agent] [-D DBFILE] [-d 'POST data'] [-x PROXY]
+                   [-a]
 
 A security scanner for HTTP response headers.
 
@@ -30,6 +31,9 @@ optional arguments:
   -h, --help            show this help message and exit
   -P, --database        Print the entire response headers database.
   -p, --headers         Print only the enabled response headers from database.
+  -H Header, --header Header
+                        Print details for a specific Header (example: Strict-
+                        Transport-Security).
   -u URL, --URL URL     The URL to be scanned.
   -R, --redirect        Print redirect headers.
   -i, --insecure        Disable certificate verification.
