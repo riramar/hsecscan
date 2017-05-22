@@ -36,6 +36,19 @@ def print_database(headers):
     cur.close()
     conn.close()
 
+def print_header(header):
+    conn = sqlite3.connect(dbfile)
+    cur = conn.cursor()
+    cur.execute('SELECT "Header Field Name", "Reference", "Security Description", "Security Reference", "Recommendations", "CWE", "CWE URL" FROM headers WHERE "Header Field Name" = ? COLLATE NOCASE', [header])
+    col_names = [cn[0] for cn in cur.description]
+    for row in cur:
+        col_index = 0
+        for cel in row:
+            print col_names[col_index] + ':', cel
+            col_index += 1
+    cur.close()
+    conn.close()
+
 def print_response(url, code, headers):
     print 'URL:', url
     print 'Code:', code
@@ -123,6 +136,7 @@ def main():
     parser = argparse.ArgumentParser(description='A security scanner for HTTP response headers.')
     parser.add_argument('-P', '--database', action='store_true', help='Print the entire response headers database.')
     parser.add_argument('-p', '--headers', action='store_true', help='Print only the enabled response headers from database.')
+    parser.add_argument('-H', '--header', metavar='Header', help='Print details for a specific Header (example: Strict-Transport-Security).')
     parser.add_argument('-u', '--URL', type=check_url, help='The URL to be scanned.')
     parser.add_argument('-R', '--redirect', action='store_true', help='Print redirect headers.')
     parser.add_argument('-i', '--insecure', action='store_true', help='Disable certificate verification.')
@@ -138,6 +152,8 @@ def main():
         print_database(False)
     elif args.headers == True:
         print_database(True)
+    elif args.header:
+        print_header(args.header.lower())
     elif args.URL:
         global allheaders
         allheaders = args.all

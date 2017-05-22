@@ -6,6 +6,7 @@
 * Add option to set any and many request headers
 * Improve README.md with more information (eg. how to use as a module)
 * Improve database fields (eg. Security description)
+* Add mutual exclusion on the parameters
 
 # Done
 
