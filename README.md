@@ -54,7 +54,7 @@ optional arguments:
 # Example
 
 ```
-$ ./hsecscan.py -u https://google.com
+$ ./hsecscan.py -i -u https://google.com
 >> RESPONSE INFO <<
 URL: https://www.google.com.br/?gfe_rd=cr&ei=GF5HV4ucH7DL8geg-aK4Dw
 Code: 200
