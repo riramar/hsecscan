@@ -4,13 +4,13 @@ A security scanner for HTTP response headers.
 
 # Requirements
 
-* Python 2.x
+* Python 2.x or Python 3.2+ (compiled with sqlite support)
 
 ## Python Modules
 
+* pysqlite2 (`pip install -r ./requirements.txt` when using Python 2.x)
 * os.path
 * argparse
-* sqlite3
 * urlparse
 * urllib2
 * urllib
@@ -49,6 +49,7 @@ optional arguments:
                         Set the proxy server (example: 192.168.1.1:8080).
   -a, --all             Print details for all response headers. Good for check
                         the related RFC.
+  -m, --missing         Print only headers that are missing from the response.
 ```
 
 # Example
