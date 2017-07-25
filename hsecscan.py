@@ -1,24 +1,35 @@
 #!/usr/bin/python -tt
 
+from __future__ import print_function
+import sys
 import os.path
 import argparse
-import sqlite3
-from urlparse import urlparse
-import urllib2
-import urllib
 import json
 import ssl
 
-class RedirectHandler(urllib2.HTTPRedirectHandler):
+if sys.version_info.major == 2:
+    from pysqlite2 import dbapi2 as sqlite3
+    from urlparse import urlparse
+    import urllib2
+    import urllib
+    import urllib2 as urlrequest
+else:
+    import sqlite3
+    import urllib.error, urllib.parse
+    import urllib.request as urlrequest
+    from urllib.parse import urlparse
+
+
+class RedirectHandler(urlrequest.HTTPRedirectHandler):
     def redirect_request(self, req, fp, code, msg, headers, newurl):
-        newreq = urllib2.HTTPRedirectHandler.redirect_request(self, req, fp, code, msg, headers, newurl)
-        print '>> REDIRECT INFO <<'
+        newreq = urlrequest.HTTPRedirectHandler.redirect_request(self, req, fp, code, msg, headers, newurl)
+        print('>> REDIRECT INFO <<')
         print_response(req.get_full_url(), code, headers)
-        print '>> REDIRECT HEADERS DETAILS <<'
-        for header in headers.items():
+        print('>> REDIRECT HEADERS DETAILS <<')
+        for header in list(headers.items()):
             check_header(header)
-        print '>> REDIRECT MISSING HEADERS <<'
-        missing_headers(headers.items(), urlparse(newurl).scheme)
+        print('>> REDIRECT MISSING HEADERS <<')
+        missing_headers(list(headers.items()), urlparse(newurl).scheme)
         return newreq
 
 def print_database(headers):
@@ -30,9 +41,9 @@ def print_database(headers):
         col_index = 0
         if (headers == False) | (row[6] == 'Y'):
             for cel in row:
-                print col_names[col_index] + ':', cel
+                print(col_names[col_index] + ':', cel)
                 col_index += 1
-            print '\n'
+            print('\n')
     cur.close()
     conn.close()
 
@@ -44,18 +55,18 @@ def print_header(header):
     for row in cur:
         col_index = 0
         for cel in row:
-            print col_names[col_index] + ':', cel
+            print(col_names[col_index] + ':', cel)
             col_index += 1
     cur.close()
     conn.close()
 
 def print_response(url, code, headers):
-    print 'URL:', url
-    print 'Code:', code
-    print 'Headers:'
+    print('URL:', url)
+    print('Code:', code)
+    print('Headers:')
     for line in str(headers).splitlines():
-        print '', line
-    print ''
+        print('', line)
+    print('')
 
 def check_header(header):
     conn = sqlite3.connect(dbfile)
@@ -70,11 +81,11 @@ def check_header(header):
         col_index = 0
         for cel in row:
             if col_names[col_index] == 'Header Field Name':
-                print col_names[col_index] + ':', cel, '\nValue: ' + header[1]
+                print(col_names[col_index] + ':', cel, '\nValue: ' + header[1])
             else:
-                print col_names[col_index] + ':', cel
+                print(col_names[col_index] + ':', cel)
             col_index += 1
-        print ''
+        print('')
     cur.close()
     conn.close()
 
@@ -88,35 +99,36 @@ def missing_headers(headers, scheme):
         if (row[0].lower() not in (name.lower() for name in header_names)) & ((scheme == 'https') | (row[7] != 'Y')):
             col_index = 0
             for cel in row:
-                print col_names[col_index] + ':', cel
+                print(col_names[col_index] + ':', cel)
                 col_index += 1
-            print ''
+            print('')
     cur.close()
     conn.close()
 
 def scan(url, redirect, insecure, useragent, postdata, proxy):
-    request = urllib2.Request(url.geturl())
+    request = urlrequest.Request(url.geturl())
     request.add_header('User-Agent', useragent)
     request.add_header('Origin', 'http://hsecscan.com')
     if postdata:
-        request.add_data(urllib.urlencode(postdata))
-    build = [urllib2.HTTPHandler()]
+        request.add_data(urllib.parse.urlencode(postdata))
+    build = [urlrequest.HTTPHandler()]
     if redirect:
         build.append(RedirectHandler())
     if proxy:
-        build.append(urllib2.ProxyHandler({'http': proxy, 'https': proxy}))
+        build.append(urlrequest.ProxyHandler({'http': proxy, 'https': proxy}))
     if insecure:
         context = ssl._create_unverified_context()
-        build.append(urllib2.HTTPSHandler(context=context))
-    urllib2.install_opener(urllib2.build_opener(*build))
-    response = urllib2.urlopen(request)
-    print '>> RESPONSE INFO <<'
+        build.append(urlrequest.HTTPSHandler(context=context))
+    urlrequest.install_opener(urlrequest.build_opener(*build))
+    response = urlrequest.urlopen(request)
+    print('>> RESPONSE INFO <<')
     print_response(response.geturl(), response.getcode(), response.info())
-    print '>> RESPONSE HEADERS DETAILS <<'
-    for header in response.info().items():
-        check_header(header)
-    print '>> RESPONSE MISSING HEADERS <<'
-    missing_headers(response.info().items(), url.scheme)
+    if missing_headers_only == False:
+        print('>> RESPONSE HEADERS DETAILS <<')
+        for header in list(response.info().items()):
+            check_header(header)
+    print('>> RESPONSE MISSING HEADERS <<')
+    missing_headers(list(response.info().items()), url.scheme)
 
 def check_url(url):
     url_checked = urlparse(url)
@@ -124,12 +136,13 @@ def check_url(url):
         raise argparse.ArgumentTypeError('Invalid %s URL (example: https://www.hsecscan.com/path).' % url)
     return url_checked
 
-def is_valid_file(parser, dbfile):
+def is_valid_file(dbfile):
     if not os.path.exists(dbfile):
         raise argparse.ArgumentTypeError('The file %s does not exist.' % dbfile)
-    fdb = open(dbfile, 'r')
-    if  fdb.read(11) != 'SQLite form':
-        raise argparse.ArgumentTypeError('The file %s is not a SQLite DB.' % dbfile)
+    try:
+        sqlite3.connect(dbfile)
+    except Exception as err:
+        raise argparse.ArgumentTypeError('The file %s is not a SQLite DB. Error: %s' % dbfile, err)
     return dbfile
 
 def main():
@@ -141,13 +154,16 @@ def main():
     parser.add_argument('-R', '--redirect', action='store_true', help='Print redirect headers.')
     parser.add_argument('-i', '--insecure', action='store_true', help='Disable certificate verification.')
     parser.add_argument('-U', '--useragent', metavar='User-Agent', default='hsecscan', help='Set the User-Agent request header (default: hsecscan).')
-    parser.add_argument('-D', '--dbfile', dest="dbfile", default='hsecscan.db', type=lambda x: is_valid_file(parser, x), help='Set the database file (default: hsecscan.db).')
+    parser.add_argument('-D', '--dbfile', dest="dbfile", default='hsecscan.db', help='Set the database file (default: hsecscan.db).')
     parser.add_argument('-d', '--postdata', metavar='\'POST data\'', type=json.loads, help='Set the POST data (between single quotes) otherwise will be a GET (example: \'{ "q":"query string", "foo":"bar" }\').')
     parser.add_argument('-x', '--proxy', help='Set the proxy server (example: 192.168.1.1:8080).')
     parser.add_argument('-a', '--all', action='store_true', help='Print details for all response headers. Good for check the related RFC.')
+    parser.add_argument('-m', '--missing', action='store_true', help='Print only headers that are missing from the response.')
     args = parser.parse_args()
     global dbfile
-    dbfile = args.dbfile
+    dbfile = is_valid_file(args.dbfile)
+    global missing_headers_only
+    missing_headers_only = args.missing
     if args.database == True:
         print_database(False)
     elif args.headers == True:
