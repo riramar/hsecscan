@@ -6,12 +6,8 @@ setup(
     author='Ricardo Iramar Dos Santos',
     license='GPLv2',
     packages=find_packages(),
-    package_data={
-        'hsecscan': ['hsecscan.db'],
-    },
+    include_package_data=True,
     entry_points={
-        'console_scripts': [
-            'hsecscan=hsecscan:main',
-        ]
+        'console_scripts': ['hsecscan=hsecscan:main'],
     },
 )
