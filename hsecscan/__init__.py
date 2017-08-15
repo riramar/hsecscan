@@ -9,6 +9,9 @@ import urllib
 import json
 import ssl
 
+_ROOT = os.path.abspath(os.path.dirname(__file__))
+DB_LOCATION = os.path.join(_ROOT, 'hsecscan.db')
+
 class RedirectHandler(urllib2.HTTPRedirectHandler):
     def redirect_request(self, req, fp, code, msg, headers, newurl):
         newreq = urllib2.HTTPRedirectHandler.redirect_request(self, req, fp, code, msg, headers, newurl)
@@ -141,7 +144,7 @@ def main():
     parser.add_argument('-R', '--redirect', action='store_true', help='Print redirect headers.')
     parser.add_argument('-i', '--insecure', action='store_true', help='Disable certificate verification.')
     parser.add_argument('-U', '--useragent', metavar='User-Agent', default='hsecscan', help='Set the User-Agent request header (default: hsecscan).')
-    parser.add_argument('-D', '--dbfile', dest="dbfile", default='hsecscan.db', type=lambda x: is_valid_file(parser, x), help='Set the database file (default: hsecscan.db).')
+    parser.add_argument('-D', '--dbfile', dest="dbfile", default=DB_LOCATION, type=lambda x: is_valid_file(parser, x), help='Set the database file (default: hsecscan.db).')
     parser.add_argument('-d', '--postdata', metavar='\'POST data\'', type=json.loads, help='Set the POST data (between single quotes) otherwise will be a GET (example: \'{ "q":"query string", "foo":"bar" }\').')
     parser.add_argument('-x', '--proxy', help='Set the proxy server (example: 192.168.1.1:8080).')
     parser.add_argument('-a', '--all', action='store_true', help='Print details for all response headers. Good for check the related RFC.')
