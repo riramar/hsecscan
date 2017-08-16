@@ -17,6 +17,14 @@ A security scanner for HTTP response headers.
 * json
 * ssl
 
+# Install
+
+You can download the latest version clicking [here](https://github.com/riramar/hsecscan/archive/master.zip) or clone the repository with the command below.
+
+```
+$ git clone https://github.com/riramar/hsecscan.git master
+```
+
 # Usage
 
 ```
