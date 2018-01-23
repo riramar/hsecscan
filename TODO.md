@@ -1,6 +1,5 @@
 # My todo list
 
-* pip installation
 * Remove duplicated missing required headers with different names
 * Add option to detect bad practice (eg. Content-Type without charset=utf-8)
 * Add option to set any and many request headers
