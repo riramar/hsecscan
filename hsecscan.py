@@ -98,6 +98,7 @@ def scan(url, redirect, insecure, useragent, postdata, proxy):
     request = urllib2.Request(url.geturl())
     request.add_header('User-Agent', useragent)
     request.add_header('Origin', 'http://hsecscan.com')
+    request.add_header('Accept', '*/*')
     if postdata:
         request.add_data(urllib.urlencode(postdata))
     build = [urllib2.HTTPHandler()]
