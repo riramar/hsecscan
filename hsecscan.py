@@ -8,6 +8,8 @@ import urllib2
 import urllib
 import json
 import ssl
+import csv
+from datetime import datetime
 
 class RedirectHandler(urllib2.HTTPRedirectHandler):
     def redirect_request(self, req, fp, code, msg, headers, newurl):
@@ -57,7 +59,7 @@ def print_response(url, code, headers):
         print '', line
     print ''
 
-def check_header(header):
+def check_header(header, csv_writer):
     conn = sqlite3.connect(dbfile)
     cur = conn.cursor()
     t = (header[0],)
@@ -66,35 +68,53 @@ def check_header(header):
     else:
         cur.execute('SELECT "Header Field Name", "Reference", "Security Description", "Security Reference", "Recommendations", "CWE", "CWE URL" FROM headers WHERE "Enable" = "Y" AND "Header Field Name" = ? COLLATE NOCASE', t)
     col_names = [cn[0] for cn in cur.description]
+    datestring = datetime.strftime(datetime.now(), '%m/%d/%Y')
     for row in cur:
+        finding = []
+        finding.append(datestring)
+        finding.append("Info")
         col_index = 0
         for cel in row:
             if col_names[col_index] == 'Header Field Name':
                 print col_names[col_index] + ':', cel, '\nValue: ' + header[1]
+                finding.append(cel)
+                finding.append(header[1])
             else:
                 print col_names[col_index] + ':', cel
+                finding.append(cel)
             col_index += 1
+
+        finding.append('')
+        csv_writer.writerow(finding)
         print ''
     cur.close()
     conn.close()
 
-def missing_headers(headers, scheme):
+def missing_headers(headers, scheme, csv_writer):
     conn = sqlite3.connect(dbfile)
     cur = conn.cursor()
     cur.execute('SELECT "Header Field Name", "Reference", "Security Description", "Security Reference", "Recommendations", "CWE", "CWE URL", "HTTPS" FROM headers WHERE "Required" = "Y"')
     col_names = [cn[0] for cn in cur.description]
     header_names = [name[0] for name in headers]
+    datestring = datetime.strftime(datetime.now(), '%m/%d/%Y')
     for row in cur:
         if (row[0].lower() not in (name.lower() for name in header_names)) & ((scheme == 'https') | (row[7] != 'Y')):
+            finding = []
+            finding.append(datestring)
+            finding.append("Low")
             col_index = 0
             for cel in row:
                 print col_names[col_index] + ':', cel
+                if col_names[col_index] == 'Header Field Name':
+                    finding.append(cel)
+                finding.append(cel)
                 col_index += 1
             print ''
+            csv_writer.writerow(finding)
     cur.close()
     conn.close()
 
-def scan(url, redirect, insecure, useragent, postdata, proxy):
+def scan(url, redirect, insecure, useragent, postdata, proxy, csv):
     request = urllib2.Request(url.geturl())
     request.add_header('User-Agent', useragent)
     request.add_header('Origin', 'http://hsecscan.com')
@@ -111,13 +131,16 @@ def scan(url, redirect, insecure, useragent, postdata, proxy):
         build.append(urllib2.HTTPSHandler(context=context))
     urllib2.install_opener(urllib2.build_opener(*build))
     response = urllib2.urlopen(request)
+    if csv:
+        csv_writer = csv_output(csv)
+
     print '>> RESPONSE INFO <<'
     print_response(response.geturl(), response.getcode(), response.info())
     print '>> RESPONSE HEADERS DETAILS <<'
     for header in response.info().items():
-        check_header(header)
+        check_header(header, csv_writer)
     print '>> RESPONSE MISSING HEADERS <<'
-    missing_headers(response.info().items(), url.scheme)
+    missing_headers(response.info().items(), url.scheme, csv_writer)
 
 def check_url(url):
     url_checked = urlparse(url)
@@ -133,6 +156,12 @@ def is_valid_file(parser, dbfile):
         raise argparse.ArgumentTypeError('The file %s is not a SQLite DB.' % dbfile)
     return dbfile
 
+def csv_output(file):
+    csv_output = open(os.path.join(os.path.dirname(file), file), 'w')
+    csvwriter = csv.writer(csv_output)
+    csvwriter.writerow(["Severity","Header Field Name", "Header Field Value", "Reference", "Security Description", "Security Reference", "Recommendations", "CWE", "CWE URL", "HTTPS"])
+    return csvwriter
+
 def main():
     parser = argparse.ArgumentParser(description='A security scanner for HTTP response headers.')
     parser.add_argument('-P', '--database', action='store_true', help='Print the entire response headers database.')
@@ -146,6 +175,7 @@ def main():
     parser.add_argument('-d', '--postdata', metavar='\'POST data\'', type=json.loads, help='Set the POST data (between single quotes) otherwise will be a GET (example: \'{ "q":"query string", "foo":"bar" }\').')
     parser.add_argument('-x', '--proxy', help='Set the proxy server (example: 192.168.1.1:8080).')
     parser.add_argument('-a', '--all', action='store_true', help='Print details for all response headers. Good for check the related RFC.')
+    parser.add_argument('-c', '--csv', help='Specify the filename to export the report as csv.')
     args = parser.parse_args()
     global dbfile
     dbfile = args.dbfile
@@ -158,7 +188,7 @@ def main():
     elif args.URL:
         global allheaders
         allheaders = args.all
-        scan(args.URL, args.redirect, args.insecure, args.useragent, args.postdata, args.proxy)
+        scan(args.URL, args.redirect, args.insecure, args.useragent, args.postdata, args.proxy, args.csv)
     else:
         parser.print_help()
 
