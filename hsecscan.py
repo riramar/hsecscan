@@ -85,7 +85,8 @@ def check_header(header, csv_writer):
             col_index += 1
 
         finding.append('')
-        csv_writer.writerow(finding)
+        if csv_writer:
+            csv_writer.writerow(finding)
         print ''
     cur.close()
     conn.close()
@@ -110,11 +111,13 @@ def missing_headers(headers, scheme, csv_writer):
                 finding.append(cel)
                 col_index += 1
             print ''
-            csv_writer.writerow(finding)
+            if csv_writer:
+                csv_writer.writerow(finding)
     cur.close()
     conn.close()
 
 def scan(url, redirect, insecure, useragent, postdata, proxy, csv):
+    csv_writer = None
     request = urllib2.Request(url.geturl())
     request.add_header('User-Agent', useragent)
     request.add_header('Origin', 'http://hsecscan.com')
@@ -159,7 +162,7 @@ def is_valid_file(parser, dbfile):
 def csv_output(file):
     csv_output = open(os.path.join(os.path.dirname(file), file), 'w')
     csvwriter = csv.writer(csv_output)
-    csvwriter.writerow(["Severity","Header Field Name", "Header Field Value", "Reference", "Security Description", "Security Reference", "Recommendations", "CWE", "CWE URL", "HTTPS"])
+    csvwriter.writerow(["Date", "Severity","Header Field Name", "Header Field Value", "Reference", "Security Description", "Security Reference", "Recommendations", "CWE", "CWE URL", "HTTPS"])
     return csvwriter
 
 def main():

@@ -28,7 +28,7 @@ $ git clone https://github.com/riramar/hsecscan.git master
 # Usage
 
 ```
-$ ./hsecscan.py 
+$ ./hsecscan.py
 usage: hsecscan.py [-h] [-P] [-p] [-H Header] [-u URL] [-R] [-i]
                    [-U User-Agent] [-D DBFILE] [-d 'POST data'] [-x PROXY]
                    [-a]
@@ -57,6 +57,7 @@ optional arguments:
                         Set the proxy server (example: 192.168.1.1:8080).
   -a, --all             Print details for all response headers. Good for check
                         the related RFC.
+  -c, --csv             Name of the CSV report file
 ```
 
 # Example
