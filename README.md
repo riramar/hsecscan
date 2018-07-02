@@ -26,7 +26,7 @@ $ pip install hsecscan
 # Usage
 
 ```
-$ ./hsecscan.py 
+$ hsecscan 
 usage: hsecscan.py [-h] [-P] [-p] [-H Header] [-u URL] [-R] [-i]
                    [-U User-Agent] [-D DBFILE] [-d 'POST data'] [-x PROXY]
                    [-a]
@@ -60,7 +60,7 @@ optional arguments:
 # Example
 
 ```
-$ ./hsecscan.py -i -u https://google.com
+$ hsecscan -i -u https://google.com
 >> RESPONSE INFO <<
 URL: https://www.google.com.br/?gfe_rd=cr&ei=GF5HV4ucH7DL8geg-aK4Dw
 Code: 200
