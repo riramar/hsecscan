@@ -19,10 +19,8 @@ A security scanner for HTTP response headers.
 
 # Install
 
-You can download the latest version clicking [here](https://github.com/riramar/hsecscan/archive/master.zip) or clone the repository with the command below.
-
 ```
-$ git clone https://github.com/riramar/hsecscan.git master
+$ pip install hsecscan
 ```
 
 # Usage
@@ -236,3 +234,7 @@ Recommendations: Read the reference http://www.w3.org/TR/CSP/ and set according 
 CWE: CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')
 CWE URL: https://cwe.mitre.org/data/definitions/79.html
 ```
+
+# Author
+
+* [Ricardo Iramar dos Santos](ricardo.iramar@gmail.com)
