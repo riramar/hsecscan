@@ -237,4 +237,4 @@ CWE URL: https://cwe.mitre.org/data/definitions/79.html
 
 # Author
 
-* [Ricardo Iramar dos Santos](ricardo.iramar@gmail.com)
+* [Ricardo Iramar dos Santos](mailto:ricardo.iramar@gmail.com)
