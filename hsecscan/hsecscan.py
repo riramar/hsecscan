@@ -98,11 +98,23 @@ def missing_headers(headers, scheme):
     cur.close()
     conn.close()
 
-def scan(url, redirect, insecure, useragent, postdata, proxy):
-    request = urllib2.Request(url.geturl())
+def add_headers(request, customheaders, useragent):
     request.add_header('User-Agent', useragent)
     request.add_header('Origin', 'http://hsecscan.com')
     request.add_header('Accept', '*/*')
+
+    header_items = dict(s.split(':', 1) for s in customheaders)
+    items = header_items.iteritems()
+    for k, v in items:
+        request.add_header(k.strip(), v.strip())
+
+    return request
+
+def scan(url, redirect, insecure, useragent, postdata, proxy, customheaders):
+
+    request = urllib2.Request(url.geturl())
+    request = add_headers(request, customheaders, useragent)
+
     if postdata:
         request.add_data(urllib.urlencode(postdata))
     build = [urllib2.HTTPHandler()]
@@ -139,17 +151,19 @@ def is_valid_file(parser, dbfile):
 
 def main():
     parser = argparse.ArgumentParser(prog='hsecscan', description='A security scanner for HTTP response headers.')
+    parser.add_argument('-a', '--all', action='store_true', help='Print details for all response headers. Good for check the related RFC.')
+    parser.add_argument('--addheader', metavar='\'Key: Value\'', action='append', help='Pass custom header to server.')
+    parser.add_argument('-d', '--postdata', metavar='\'POST data\'', type=json.loads, help='Set the POST data (between single quotes) otherwise will be a GET (example: \'{ "q":"query string", "foo":"bar" }\').')
+    parser.add_argument('-D', '--dbfile', dest="dbfile", default=os.path.dirname(os.path.abspath(__file__))+'/hsecscan.db', type=lambda x: is_valid_file(parser, x), help='Set the database file (default: hsecscan.db).')
+    parser.add_argument('-H', '--header', metavar='Header', help='Print details for a specific Header (example: Strict-Transport-Security).')
+    parser.add_argument('-i', '--insecure', action='store_true', help='Disable certificate verification.')
     parser.add_argument('-P', '--database', action='store_true', help='Print the entire response headers database.')
     parser.add_argument('-p', '--headers', action='store_true', help='Print only the enabled response headers from database.')
-    parser.add_argument('-H', '--header', metavar='Header', help='Print details for a specific Header (example: Strict-Transport-Security).')
-    parser.add_argument('-u', '--URL', type=check_url, help='The URL to be scanned.')
     parser.add_argument('-R', '--redirect', action='store_true', help='Print redirect headers.')
-    parser.add_argument('-i', '--insecure', action='store_true', help='Disable certificate verification.')
+    parser.add_argument('-u', '--URL', type=check_url, help='The URL to be scanned.')
     parser.add_argument('-U', '--useragent', metavar='User-Agent', default='hsecscan', help='Set the User-Agent request header (default: hsecscan).')
-    parser.add_argument('-D', '--dbfile', dest="dbfile", default=os.path.dirname(os.path.abspath(__file__))+'/hsecscan.db', type=lambda x: is_valid_file(parser, x), help='Set the database file (default: hsecscan.db).')
-    parser.add_argument('-d', '--postdata', metavar='\'POST data\'', type=json.loads, help='Set the POST data (between single quotes) otherwise will be a GET (example: \'{ "q":"query string", "foo":"bar" }\').')
     parser.add_argument('-x', '--proxy', help='Set the proxy server (example: 192.168.1.1:8080).')
-    parser.add_argument('-a', '--all', action='store_true', help='Print details for all response headers. Good for check the related RFC.')
+
     args = parser.parse_args()
     global dbfile
     dbfile = args.dbfile
@@ -162,6 +176,6 @@ def main():
     elif args.URL:
         global allheaders
         allheaders = args.all
-        scan(args.URL, args.redirect, args.insecure, args.useragent, args.postdata, args.proxy)
+        scan(args.URL, args.redirect, args.insecure, args.useragent, args.postdata, args.proxy, args.addheader)
     else:
         parser.print_help()
